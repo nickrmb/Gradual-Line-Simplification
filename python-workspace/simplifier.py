@@ -35,11 +35,11 @@ def simplifyFile(filePath):
 
     length = len(simplified)
 
+    out.write(str(length) + "\n")
+
     for i in range(length):
         point = simplified[i]
         out.write(str(point[0]) + ',' + str(point[1]))
-        
-        if (i == length-1): continue
         out.write('\n')
     
     out.close

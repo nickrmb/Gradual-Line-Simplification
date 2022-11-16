@@ -30,18 +30,17 @@ def grab(fromPage, toPage, targetDirectory):
             
             length = len(simplified)
 
+            out.write(str(length) + "\n")
+
             for i in range(length):
                 point = simplified[i]
                 line = str(point[0]) + ',' + str(point[1])
                 out.write(line)
-
-                if (i == length-1):
-                    continue
                 out.write('\n')
 
             out.close
 
     
-# grab(1, 1, "/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/data")
+grab(1, 1, "/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/data")
 
     
