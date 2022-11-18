@@ -1,16 +1,28 @@
 package distance;
 
-import line.Line;
+import line.PolyLine;
 
 public interface DistanceMeasurement {
 	
-	/**
-	 * Calculates some distance measure for a shortcut from Point a to Point b in Line l
-	 * @param l The line
-	 * @param a Start point of shortcut
-	 * @param b End point of shortcut
-	 * @return The distance
-	 */
-	public double distance(Line l, int a, int b);
 	
+	/**
+	 * Gets the distance of a shortcut
+	 * @param l The polyline
+	 * @param from The index of the point where the shortcut starts
+	 * @param to The index of the point where the shortcut ends
+	 * @return The shortcut error
+	 */
+	public double distance(PolyLine l, int from, int to);
+	
+}
+
+
+class Tuple<T, R> {
+	T l;
+	R r;
+
+	Tuple(T l, R r) {
+		this.l = l;
+		this.r = r;
+	}
 }

@@ -1,18 +1,99 @@
 package distance;
 
-import line.Line;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Hausdorff implements DistanceMeasurement{
+import line.Point;
+import line.PolyLine;
+
+public class Hausdorff implements DistanceMeasurement {
 
 	@Override
-	public double distance(Line l, int a, int b) {
-		// TODO: Implement Hausdorff Distance
-		return 0;
+	public double distance(PolyLine l, int from, int to) {
+		Tuple<List<Double>, double[]> hausdorff = getTypeB(l, from, to);
+		List<Double> errors = hausdorff.l;
+
+		double max = 0;
+		for (Double error : errors)
+			max = (error > max) ? error : max;
+
+		return max;
 	}
-	
-	@Override
-	public String toString() {
-		return "Hausdorff";
+
+	/**
+	 * Gets the list of possible hausdorff errors
+	 * 
+	 * @param l    The line
+	 * @param from The start of the shortcut
+	 * @param to   The end of the shortcut
+	 * @return List of errors
+	 */
+	public static Tuple<List<Double>, double[]> getTypeB(PolyLine l, int from, int to) {
+		List<Double> errors = new ArrayList<Double>();
+		double[] t = new double[to - from - 1]; // arrays holding which t is next to each point, t in [0;1]
+
+		Point a = l.getPoint(from);
+		Point b = l.getPoint(to);
+
+		boolean abDuplicates = false;
+
+		if (a.squaredDistanceTo(b) == 0.0) {
+			abDuplicates = true;
+		}
+
+		// type b (shortest distance to line)
+		for (int i = from + 1; i < to; i++) {
+			Point p = l.getPoint(i);
+
+			if (abDuplicates) {
+				errors.add(a.distanceTo(p));
+				continue;
+			}
+
+			Tuple<Double, Double> nearest = nearestPointOnSegment(a, b, p);
+
+			t[i - from - 1] = nearest.l;
+			errors.add(nearest.r);
+
+			//System.out.println("Direct of " + i + " at " + nearest.l + "	: " + nearest.r);
+		}
+
+		return new Tuple<List<Double>, double[]>(errors, t);
+	}
+
+	/**
+	 * Gets the t and error of the nearest Point on Segment <a,b> of a Point p
+	 * 
+	 * @param a The Point where the segment starts
+	 * @param b The Point where the segment ends
+	 * @param p The Point of interest
+	 * @return A tuple containing t as first argument and the error as second
+	 *         argument
+	 */
+	private static Tuple<Double, Double> nearestPointOnSegment(Point a, Point b, Point p) {
+		double ax = a.getX();
+		double ay = a.getY();
+		double bx = b.getX();
+		double by = b.getY();
+		double px = p.getX();
+		double py = p.getY();
+
+		double pt = ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / a.squaredDistanceTo(b);
+		Point nearestPoint;
+		// check bounds
+		if (pt <= 0.0) {
+			pt = 0.0;
+			nearestPoint = a;
+		} else if (pt >= 1.0) {
+			pt = 1.0;
+			nearestPoint = b;
+		} else {
+			nearestPoint = new Point(ax + (bx - ax) * pt, ay + (by - ay) * pt);
+		}
+
+		double error = p.distanceTo(nearestPoint);
+
+		return new Tuple<Double, Double>(pt, error);
 	}
 
 }

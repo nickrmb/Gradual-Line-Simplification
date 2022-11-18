@@ -12,6 +12,7 @@ def simplifyData(data):
         lon = split[3]
 
         simplified.append((lat,lon))
+        
     
     return simplified
 
