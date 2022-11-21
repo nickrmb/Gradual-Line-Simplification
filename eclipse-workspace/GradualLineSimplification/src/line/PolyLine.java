@@ -39,6 +39,22 @@ public class PolyLine {
 		active--;
 	}
 
+
+	/**
+	 * Add a point (opposite of remove function)
+	 * 
+	 * @param i the index of the point
+	 */
+	public void add(int i) {
+		if (!isRemoved[i]) {
+			throw new IllegalStateException("Can not ad a Point that is already added");
+		}
+
+		// add
+		isRemoved[i] = false;
+		active++;
+	}
+
 	/**
 	 * Gets a Point at an index
 	 * 
@@ -47,6 +63,16 @@ public class PolyLine {
 	 */
 	public Point getPoint(int i) {
 		return points[i];
+	}
+
+	/**
+	 * Gets whether a point is active or not
+	 * 
+	 * @param i The index of the point
+	 * @return true if not removed, else false
+	 */
+	public boolean isActive(int i) {
+		return !isRemoved[i];
 	}
 
 	/**

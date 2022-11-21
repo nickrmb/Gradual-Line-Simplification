@@ -94,5 +94,10 @@ public class Hausdorff implements DistanceMeasurement {
 
 		return new Tuple<>(nearestPoint, pt);
 	}
+	
+	@Override
+	public String toString() {
+		return "Hausdorff";
+	}
 
 }

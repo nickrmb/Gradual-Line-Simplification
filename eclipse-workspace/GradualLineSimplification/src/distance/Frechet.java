@@ -207,5 +207,10 @@ public class Frechet implements DistanceMeasurement {
 
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "Frechet";
+	}
 
 }
