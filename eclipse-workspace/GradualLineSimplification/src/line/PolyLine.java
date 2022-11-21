@@ -2,13 +2,9 @@ package line;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.IllegalFormatException;
 import java.util.zip.DataFormatException;
-
-import javax.annotation.processing.FilerException;
 
 public class PolyLine {
 
@@ -80,11 +76,12 @@ public class PolyLine {
 	 * @throws DataFormatException
 	 */
 	public static PolyLine readLine(File f) throws NumberFormatException, IOException, DataFormatException {
+		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 
 		int numberPoints = Integer.parseInt(reader.readLine());
 		Point[] points = new Point[numberPoints];
-		
+
 		double sx = 0, sy = 0;
 
 		for (int i = 0; i < numberPoints; i++) {
@@ -97,17 +94,25 @@ public class PolyLine {
 
 			double x = Double.parseDouble(split[0]);
 			double y = Double.parseDouble(split[1]);
-			
-			if(i == 0) {
+
+			if (i == 0) {
 				sx = x;
 				sy = y;
 			}
-			
 
 			points[i] = new Point(x - sx, y - sy);
 		}
 
 		return new PolyLine(points);
+	}
+
+	/**
+	 * Gets the number of points in the line
+	 * 
+	 * @return number points
+	 */
+	public int length() {
+		return points.length;
 	}
 
 }

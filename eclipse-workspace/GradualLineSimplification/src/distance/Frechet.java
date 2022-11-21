@@ -7,9 +7,11 @@ import java.util.List;
 
 import line.Point;
 
+import util.Tuple;
+
 public class Frechet implements DistanceMeasurement {
 
-	private static final double delta = 0.00000000000001; // room of error at testing
+	private static final double delta = 0.000000000000005; // room of error at testing
 
 	@Override
 	public double distance(PolyLine l, int from, int to) {
@@ -61,10 +63,10 @@ public class Frechet implements DistanceMeasurement {
 					Point p = l.getPoint(from + 1 + i);
 					Point q = l.getPoint(from + 1 + j);
 
-					Tuple<Double, Double> nearestCommon = nearestCommonPointOnSegment(a, b, p, q);
+					Tuple<Point, Double> nearestCommon = nearestCommonPointOnSegmentBetween(a, b, p, q, t[i], t[j]);
 
 					if (nearestCommon != null) {
-						errors.add(nearestCommon.r);
+						errors.add(p.distanceTo(nearestCommon.l));
 						//System.out.println("Intersection between " + (i + from + 1) + " and " + (j + from + 1) + " at "
 						//		+ nearestCommon.l + ": " + nearestCommon.r);
 					}
@@ -83,10 +85,13 @@ public class Frechet implements DistanceMeasurement {
 	 * @param b The index of the point where the shortcut ends
 	 * @param p The first point of interest
 	 * @param q The second point of interest
-	 * @return A tuple containing t as first argument and the error as second
-	 *         argument
+	 * @param tp The t of the first point of interest (p)
+	 * @param tq The t of the second point of interest (q)
+	 * @return A tuple containing a point as first argument and t as second argument
+	 *         
+	 * @apiNote It has to hold that tp > tq
 	 */
-	private static Tuple<Double, Double> nearestCommonPointOnSegment(Point a, Point b, Point p, Point q) {
+	private static Tuple<Point, Double> nearestCommonPointOnSegmentBetween(Point a, Point b, Point p, Point q, double tp, double tq) {
 		double ax = a.getX();
 		double ay = a.getY();
 		double bx = b.getX();
@@ -101,7 +106,7 @@ public class Frechet implements DistanceMeasurement {
 				/ ((ax - bx) * (px - qx) + (ay - by) * (py - qy)) / 2.0;
 
 		// check bounds
-		if (tBetween > 1.0 || tBetween < 0.0) {
+		if (tBetween >= tp || tBetween <= tq) {
 			// System.out.println("No intersection between " + (i + from + 1) + " and " + (j
 			// + from + 1)
 			// + " at t = " + tBetween);
@@ -110,9 +115,8 @@ public class Frechet implements DistanceMeasurement {
 
 		// get intersection
 		Point intersection = new Point(ax + (bx - ax) * tBetween, ay + (by - ay) * tBetween);
-		double error = p.distanceTo(intersection);
 
-		return new Tuple<Double, Double>(tBetween, error);
+		return new Tuple<>(intersection, tBetween);
 	}
 
 	/**

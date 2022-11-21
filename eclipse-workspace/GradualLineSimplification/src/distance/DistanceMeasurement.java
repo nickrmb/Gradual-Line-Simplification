@@ -15,14 +15,3 @@ public interface DistanceMeasurement {
 	public double distance(PolyLine l, int from, int to);
 	
 }
-
-
-class Tuple<T, R> {
-	T l;
-	R r;
-
-	Tuple(T l, R r) {
-		this.l = l;
-		this.r = r;
-	}
-}

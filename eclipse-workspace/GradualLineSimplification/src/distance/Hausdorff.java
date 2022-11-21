@@ -5,6 +5,7 @@ import java.util.List;
 
 import line.Point;
 import line.PolyLine;
+import util.Tuple;
 
 public class Hausdorff implements DistanceMeasurement {
 
@@ -50,15 +51,15 @@ public class Hausdorff implements DistanceMeasurement {
 				continue;
 			}
 
-			Tuple<Double, Double> nearest = nearestPointOnSegment(a, b, p);
+			Tuple<Point, Double> nearest = nearestPointOnSegment(a, b, p);
 
-			t[i - from - 1] = nearest.l;
-			errors.add(nearest.r);
+			t[i - from - 1] = nearest.r;
+			errors.add(p.distanceTo(nearest.l));
 
 			//System.out.println("Direct of " + i + " at " + nearest.l + "	: " + nearest.r);
 		}
 
-		return new Tuple<List<Double>, double[]>(errors, t);
+		return new Tuple<>(errors, t);
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class Hausdorff implements DistanceMeasurement {
 	 * @return A tuple containing t as first argument and the error as second
 	 *         argument
 	 */
-	private static Tuple<Double, Double> nearestPointOnSegment(Point a, Point b, Point p) {
+	private static Tuple<Point, Double> nearestPointOnSegment(Point a, Point b, Point p) {
 		double ax = a.getX();
 		double ay = a.getY();
 		double bx = b.getX();
@@ -91,9 +92,7 @@ public class Hausdorff implements DistanceMeasurement {
 			nearestPoint = new Point(ax + (bx - ax) * pt, ay + (by - ay) * pt);
 		}
 
-		double error = p.distanceTo(nearestPoint);
-
-		return new Tuple<Double, Double>(pt, error);
+		return new Tuple<>(nearestPoint, pt);
 	}
 
 }
