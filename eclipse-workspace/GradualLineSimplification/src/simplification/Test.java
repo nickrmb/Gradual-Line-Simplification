@@ -19,11 +19,13 @@ public class Test {
 				new Point(9, 2), new Point(10, 0), new Point(14, 1) };
 		PolyLine l = new PolyLine(points);
 		//PolyLine l = PolyLine.readLine(new File("/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/data/5377790.sgpx"));
+		
+		//GreedySimplification simpl = new GreedySimplification();
+		//ExactSimplification simpl = new ExactSimplification();
 
-		
-		GreedySimplification simpl = new GreedySimplification();
-		
-		Tuple<int[], double[]> solution = simpl.simplify(l, new Hausdorff());
+		//Tuple<int[], double[]> solution = new ExactSimplification().simplify(l, new Hausdorff());
+		//Tuple<int[], double[]> solution = new GreedySimplification().simplify(l, new Hausdorff());
+		Tuple<int[], double[]> solution = new RandomSimplification().simplify(l, new Hausdorff());
 		
 		System.out.println(solution.r[solution.r.length - 1]);
 		

@@ -7,9 +7,9 @@ import line.PolyLine;
 public class Test {
 
 	public static void main(String[] args) {
-		Node n1 = new Node(0);
+		HeapNode n1 = new HeapNode(0);
 		n1.error = 1;
-		Node n2 = new Node(1);
+		HeapNode n2 = new HeapNode(1);
 		n2.error = 2;
 		System.out.println(n1.compareTo(n2));
 		

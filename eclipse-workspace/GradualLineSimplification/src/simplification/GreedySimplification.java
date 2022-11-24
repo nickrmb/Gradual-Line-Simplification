@@ -3,7 +3,7 @@ package simplification;
 import distance.DistanceMeasurement;
 import line.PolyLine;
 import util.MinNodeHeap;
-import util.Node;
+import util.HeapNode;
 import util.Tuple;
 
 public class GreedySimplification implements LineSimplifier{
@@ -20,7 +20,7 @@ public class GreedySimplification implements LineSimplifier{
 		
 		
 		for(int i = 0; i < numPointsBetween; i++) {
-			Node node = minHeap.extract();
+			HeapNode node = minHeap.extract();
 			currentError += node.error;
 			
 			simplification[i] = node.index;

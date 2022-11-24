@@ -8,7 +8,7 @@ public class MinNodeHeap {
 	private PolyLine line;
 	private DistanceMeasurement distance;
 
-	private Node[] heap;
+	private HeapNode[] heap;
 	private int length;
 
 	public MinNodeHeap(PolyLine line, DistanceMeasurement distance) {
@@ -16,12 +16,12 @@ public class MinNodeHeap {
 		this.line = line;
 		this.distance = distance;
 
-		heap = new Node[length];
+		heap = new HeapNode[length];
 
 		// initialize heap
-		heap[0] = new Node(0);
+		heap[0] = new HeapNode(0);
 		for (int i = 1; i < length; i++) {
-			heap[i] = new Node(i);
+			heap[i] = new HeapNode(i);
 			heap[i].left = heap[i - 1];
 		}
 		for (int i = 0; i < length - 1; i++) {
@@ -39,11 +39,11 @@ public class MinNodeHeap {
 		}
 	}
 
-	public Node extract() {
-		Node smallest = heap[0];
+	public HeapNode extract() {
+		HeapNode smallest = heap[0];
 
-		Node left = smallest.left;
-		Node right = smallest.right;
+		HeapNode left = smallest.left;
+		HeapNode right = smallest.right;
 
 		double leftBefore = left.error;
 		double rightBefore = right.error;
@@ -106,7 +106,7 @@ public class MinNodeHeap {
 	}
 
 	private void swap(int i1, int i2) {
-		Node a = heap[i1];
+		HeapNode a = heap[i1];
 		heap[i1] = heap[i2];
 		heap[i2] = a;
 
