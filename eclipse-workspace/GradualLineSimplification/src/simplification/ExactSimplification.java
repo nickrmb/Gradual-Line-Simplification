@@ -27,7 +27,7 @@ public class ExactSimplification implements LineSimplifier {
 		double[] error = new double[numPointsBetween];
 
 		for (int hop = 2; hop < l.length(); hop++) {
-			System.out.println(hop);
+			//System.out.println(hop);
 			for (int i = 0; i < l.length() - hop; i++) {
 				int j = i + hop;
 
@@ -102,6 +102,11 @@ public class ExactSimplification implements LineSimplifier {
 		}
 
 		return errorShortcut.getValue(i, j);
+	}
+	
+	@Override
+	public String toString() {
+		return "Exact";
 	}
 
 }

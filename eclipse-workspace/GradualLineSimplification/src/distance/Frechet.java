@@ -11,7 +11,7 @@ import util.Tuple;
 
 public class Frechet implements DistanceMeasurement {
 
-	private static final double delta = 0.000000000000005; // room of error at testing
+	public static final double DELTA = 0.000000000000005; // room of error for testing
 
 	@Override
 	public double distance(PolyLine l, int from, int to) {
@@ -128,7 +128,7 @@ public class Frechet implements DistanceMeasurement {
 	 * @param error The error
 	 * @return true if valid, else false
 	 */
-	public static boolean test(PolyLine l, int from, int to, double error) {
+	public static boolean test(PolyLine l, int from, int to, double error, double delta) {
 		double lower = 0.0;
 		double upper = 1.0;
 

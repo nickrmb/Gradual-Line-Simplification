@@ -22,4 +22,10 @@ public class InOrderSimplification implements LineSimplifier {
 
 		return new Tuple<>(simplification, Util.errorFromSimplification(simplification, l, distanceMeasurement));
 	}
+	
+	@Override
+	public String toString() {
+		return "In Order";
+	}
+	
 }
