@@ -42,7 +42,6 @@ public class Visualizer extends JFrame {
 	private static final int textHeight = 20;
 
 	private int cur = 0;
-	private boolean drawPoints = true;
 
 	public Visualizer(PolyLine l, int[] simplification, double[] error) {
 
@@ -76,8 +75,6 @@ public class Visualizer extends JFrame {
 		double spanY = maxY - minY;
 
 		double span = (spanX > spanY) ? spanX : spanY;
-
-		System.out.println(spanX);
 
 		for (int i = 0; i < l.length(); i++) {
 			Point p = l.getPoint(i);
@@ -254,8 +251,6 @@ public class Visualizer extends JFrame {
 
 				if (key == 32)
 
-					System.out.println(key);
-
 				if (key < 48 || key > 57) {
 					e.setKeyChar((char) 0);
 				}
@@ -365,7 +360,6 @@ public class Visualizer extends JFrame {
 				
 				try {
 					ImageIO.write(bi, "PNG", f);
-					System.out.println(f.getAbsolutePath());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
