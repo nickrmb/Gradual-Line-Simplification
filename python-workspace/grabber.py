@@ -41,6 +41,6 @@ def grab(fromPage, toPage, targetDirectory):
             out.close
 
     
-grab(1, 1, "/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/data")
+# grab(1, 1, "/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/data")
 
     
