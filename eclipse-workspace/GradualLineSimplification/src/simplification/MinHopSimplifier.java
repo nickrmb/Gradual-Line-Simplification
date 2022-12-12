@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import distance.DistanceMeasurement;
-import distance.Hausdorff;
-import line.Point;
 import line.PolyLine;
-import test.Visualizer;
 import util.Tuple;
-import util.Util;
 
 public class MinHopSimplifier implements LineSimplifier {
 

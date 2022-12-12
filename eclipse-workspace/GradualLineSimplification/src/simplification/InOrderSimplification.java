@@ -3,7 +3,6 @@ package simplification;
 import distance.DistanceMeasurement;
 import line.PolyLine;
 import util.Tuple;
-import util.Util;
 
 public class InOrderSimplification implements LineSimplifier {
 	

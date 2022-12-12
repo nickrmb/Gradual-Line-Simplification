@@ -32,7 +32,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import distance.DistanceMeasurement;
-import distance.FrechetApprox;
 import line.Point;
 import line.PolyLine;
 import simplification.LineSimplifier;

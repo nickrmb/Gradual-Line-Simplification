@@ -1,4 +1,4 @@
-package simplification;
+package test;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,11 @@ import distance.Frechet;
 import distance.FrechetApprox;
 import distance.Hausdorff;
 import line.PolyLine;
+import simplification.ExactSimplification;
+import simplification.GreedySimplification;
+import simplification.InOrderSimplification;
+import simplification.LineSimplifier;
+import simplification.RandomSimplification;
 import util.Tuple;
 
 public class TestSimplifier {

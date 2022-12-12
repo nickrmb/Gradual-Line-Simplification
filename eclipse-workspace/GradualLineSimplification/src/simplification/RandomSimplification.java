@@ -5,7 +5,6 @@ import java.util.Random;
 import distance.DistanceMeasurement;
 import line.PolyLine;
 import util.Tuple;
-import util.Util;
 
 public class RandomSimplification implements LineSimplifier {
 
