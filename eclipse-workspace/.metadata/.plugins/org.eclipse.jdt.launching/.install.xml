@@ -2,5 +2,7 @@
 <dirs>
     <entry loc="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.macosx.aarch64_17.0.4.v20220903-1038" stamp="1662666560000"/>
     <entry loc="/Library/Java/JavaVirtualMachines/jdk-19.jdk/Contents/Home" stamp="1666978885017"/>
+    <entry loc="/Library/Java/JavaVirtualMachines/jdk-16.0.2.jdk/Contents/Home/bin" stamp="1623191629000"/>
+    <entry loc="/Library/Java/JavaVirtualMachines/jdk-16.0.2.jdk/Contents/Home" stamp="1623191630000"/>
     <entry loc="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.macosx.aarch64_17.0.4.v20220903-1038/jre" stamp="1662666560000"/>
 </dirs>
