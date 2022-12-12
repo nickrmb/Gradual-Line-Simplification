@@ -3,20 +3,20 @@ package distance;
 import line.Point;
 import line.PolyLine;
 
-public class FrechetIntervalSearch implements DistanceMeasurement {
+public class FrechetApprox implements DistanceMeasurement {
 
 	private double delta = 0.0000005;
 	private int iterations = 20;
 
-	public FrechetIntervalSearch() {
+	public FrechetApprox() {
 	}
 
-	public FrechetIntervalSearch(double delta) {
+	public FrechetApprox(double delta) {
 		this.delta = delta;
 		iterations = -1;
 	}
 
-	public FrechetIntervalSearch(int maxIterations) {
+	public FrechetApprox(int maxIterations) {
 		this.iterations = maxIterations;
 	}
 
@@ -70,10 +70,14 @@ public class FrechetIntervalSearch implements DistanceMeasurement {
 		}
 		return upper;
 	}
+	
+	public void setIterations(int iterations) {
+		this.iterations = iterations;
+	}
 
 	@Override
 	public String toString() {
-		return "Frechet Interval Search";
+		return "FrechetApprox";
 	}
 
 }

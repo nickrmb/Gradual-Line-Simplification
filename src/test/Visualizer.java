@@ -1,4 +1,4 @@
-package line;
+package test;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -16,6 +16,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.zip.DataFormatException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -30,6 +31,14 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import distance.DistanceMeasurement;
+import distance.FrechetApprox;
+import line.Point;
+import line.PolyLine;
+import simplification.LineSimplifier;
+import util.Tuple;
+import util.Util;
+
 public class Visualizer extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -42,6 +51,22 @@ public class Visualizer extends JFrame {
 	private static final int textHeight = 20;
 
 	private int cur = 0;
+
+	public static void main(String[] args) throws NumberFormatException, IOException, DataFormatException {
+		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasurement> fromArgs = Simplify.getFromArgs(args);
+
+		PolyLine line = fromArgs.l.l;
+		LineSimplifier simplifier = fromArgs.l.r;
+		DistanceMeasurement distance = fromArgs.r;
+
+		Tuple<int[], double[]> solution = simplifier.simplify(line, distance);
+		if (solution.r == null)
+			solution.r = Util.errorFromSimplification(solution.l, line, distance);
+
+		// start visualizer
+		new Visualizer(line, solution.l, solution.r);
+
+	}
 
 	public Visualizer(PolyLine l, int[] simplification, double[] error) {
 
@@ -215,7 +240,7 @@ public class Visualizer extends JFrame {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(nField.getText().equals("")) {
+				if (nField.getText().equals("")) {
 					nField.setText("2");
 				}
 				int n = Integer.valueOf(nField.getText());
@@ -251,9 +276,9 @@ public class Visualizer extends JFrame {
 
 				if (key == 32)
 
-				if (key < 48 || key > 57) {
-					e.setKeyChar((char) 0);
-				}
+					if (key < 48 || key > 57) {
+						e.setKeyChar((char) 0);
+					}
 
 			}
 
@@ -357,7 +382,7 @@ public class Visualizer extends JFrame {
 								pointSize);
 					}
 				}
-				
+
 				try {
 					ImageIO.write(bi, "PNG", f);
 				} catch (IOException e1) {
