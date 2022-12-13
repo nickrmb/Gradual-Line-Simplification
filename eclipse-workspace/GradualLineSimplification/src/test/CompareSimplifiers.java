@@ -86,8 +86,10 @@ public class CompareSimplifiers {
 
 			@Override
 			public int compare(File o1, File o2) {
-				String name1 = o1.getName().split(".")[0];
-				String name2 = o1.getName().split(".")[0];
+				String n1 = o1.getName();
+				String n2 = o2.getName();
+				String name1 = n1.split("\\.")[0];
+				String name2 = n2.split("\\.")[0];
 				
 				int i1, i2;
 
@@ -139,7 +141,7 @@ public class CompareSimplifiers {
 
 					t.start();
 
-					t.join(15000);
+					t.join(900000);
 
 					if (solution == null) {
 						if (t.isAlive())
