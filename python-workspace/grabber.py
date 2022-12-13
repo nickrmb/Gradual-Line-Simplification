@@ -1,6 +1,7 @@
 import requests
 import re
 import simplifier
+import bz2
 
 graphsUrl = 'https://www.openstreetmap.org/traces/page/'
 
@@ -22,9 +23,21 @@ def grab(fromPage, toPage, targetDirectory):
 
             downloadRes = requests.get(downloadUrl)
 
-            out = open(targetDirectory + str(trace) + ".sgpx", "w")
+            file = re.findall("filename=(.+)", downloadRes.headers['content-disposition'])[0]
+            if (not ".gpx" in file) and (not ".bz2" in file):
+                continue
 
-            data = str(downloadRes.content)
+            content = downloadRes.content
+
+            path = targetDirectory + str(trace) + ".sgpx"
+            out = open(path, "w")
+
+            if ("bz2" in file):
+                if not isinstance(content, bytes):
+                    content = bytes(content, 'utf-8')
+                content = bz2.decompress(content)
+            
+            data = str(content)
 
             simplified = simplifier.simplifyData(data)
             
@@ -41,6 +54,6 @@ def grab(fromPage, toPage, targetDirectory):
             out.close
 
     
-# grab(1, 1, "/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/data")
+grab(1, 1, "/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/data")
 
     
