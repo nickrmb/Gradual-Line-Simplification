@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.zip.DataFormatException;
 
 import distance.DistanceMeasurement;
@@ -80,6 +82,31 @@ public class CompareSimplifiers {
 		writer.write(header + "\n");
 
 		File[] files = directory.listFiles();
+		Arrays.sort(files, new Comparator<File>() {
+
+			@Override
+			public int compare(File o1, File o2) {
+				String name1 = o1.getName().split(".")[0];
+				String name2 = o1.getName().split(".")[0];
+				
+				int i1, i2;
+
+				try {
+					i1 = Integer.valueOf(name1);
+				} catch(NumberFormatException e) {
+					return 1;
+				}
+
+				try {
+					i2 = Integer.valueOf(name2);
+				} catch(NumberFormatException e) {
+					return -1;
+				}
+				
+				return Integer.compare(i1, i2);
+				
+			}
+		});
 		int cur = 0;
 		for (int i = 0; i < files.length; i++) {
 			File lineFile = files[i];
@@ -94,7 +121,7 @@ public class CompareSimplifiers {
 			try {
 				PolyLine line = PolyLine.readLine(lineFile);
 
-				System.out.print((cur + 1) + "/" + (files.length - 1) + " ; " + lineName + ": \t");
+				System.out.print(cur + "/" + (files.length - 1) + " ; " + lineName + ": \t");
 
 				String output = lineName + "," + line.length() + ",";
 
