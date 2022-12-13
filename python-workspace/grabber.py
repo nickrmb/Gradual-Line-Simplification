@@ -2,6 +2,7 @@ import requests
 import re
 import simplifier
 import bz2
+from os.path import exists
 
 graphsUrl = 'https://www.openstreetmap.org/traces/page/'
 
@@ -29,9 +30,6 @@ def grab(fromPage, toPage, targetDirectory):
 
             content = downloadRes.content
 
-            path = targetDirectory + str(trace) + ".sgpx"
-            out = open(path, "w")
-
             if ("bz2" in file):
                 if not isinstance(content, bytes):
                     content = bytes(content, 'utf-8')
@@ -42,6 +40,11 @@ def grab(fromPage, toPage, targetDirectory):
             simplified = simplifier.simplifyData(data)
             
             length = len(simplified)
+            path = targetDirectory + str(length) + ".sgpx"
+            if exists(path):
+                continue
+
+            out = open(path, "w")
 
             out.write(str(length) + "\n")
 
