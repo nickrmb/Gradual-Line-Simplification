@@ -23,8 +23,11 @@ public class CompareSimplifiers {
 	private static LineSimplifier[] simplifiers = { new InOrderSimplification(), new RandomSimplification(),
 			new MinHopSimplifier(), new GreedySimplification(), new ExactSimplification() };
 
+	private static Tuple<Double, Double> solution = null;
+
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws IOException {
-		if (args.length < 3) {
+		if (args.length < 2) {
 			throw new IllegalArgumentException(
 					"Arguments must be given by: <lineDirectory> <distanceType> <optimal:distanceArgument>");
 		}
@@ -97,15 +100,34 @@ public class CompareSimplifiers {
 
 				for (int j = 0; j < simplifiers.length; j++) {
 					LineSimplifier simplifier = simplifiers[j];
+					solution = null;
 
-					Tuple<Double, Double> solution = Util.computeWithTime(line, simplifier, distance);
+					Thread t = new Thread(new Runnable() {
 
-					System.out.print("|");
+						@Override
+						public void run() {
+							solution = Util.computeWithTime(line, simplifier, distance);
+						}
+					});
 
-					double error = solution.l;
-					double time = solution.r;
+					t.start();
 
-					output += error + "," + time;
+					t.join(15000);
+
+					if (solution == null) {
+						if (t.isAlive())
+							t.stop();
+						System.out.print("O");
+
+						output += "-1,-1";
+					} else {
+						System.out.print("|");
+
+						double error = solution.l;
+						double time = solution.r;
+
+						output += error + "," + time;
+					}
 
 					if (j != simplifiers.length - 1) {
 						output += ",";
@@ -117,12 +139,12 @@ public class CompareSimplifiers {
 				writer.flush();
 				System.out.print("\n");
 
-			} catch (NumberFormatException | IOException | DataFormatException e) {
+			} catch (InterruptedException | NumberFormatException | IOException | DataFormatException e) {
 				System.err.println("At " + lineName);
 				e.printStackTrace();
 			}
 		}
-		
+
 		writer.close();
 
 	}
