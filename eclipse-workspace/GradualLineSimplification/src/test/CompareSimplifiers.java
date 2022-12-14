@@ -90,26 +90,27 @@ public class CompareSimplifiers {
 				String n2 = o2.getName();
 				String name1 = n1.split("\\.")[0];
 				String name2 = n2.split("\\.")[0];
-				
+
 				int i1, i2;
 
 				try {
 					i1 = Integer.valueOf(name1);
-				} catch(NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					return 1;
 				}
 
 				try {
 					i2 = Integer.valueOf(name2);
-				} catch(NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					return -1;
 				}
-				
+
 				return Integer.compare(i1, i2);
-				
+
 			}
 		});
 		int cur = 0;
+		boolean[] failed = new boolean[simplifiers.length];
 		for (int i = 0; i < files.length; i++) {
 			File lineFile = files[i];
 
@@ -138,15 +139,19 @@ public class CompareSimplifiers {
 							solution = Util.computeWithTime(line, simplifier, distance);
 						}
 					});
+					
+					if (!failed[j]) {
 
-					t.start();
+						t.start();
 
-					t.join(900000);
+						t.join(900000);
+					}
 
 					if (solution == null) {
 						if (t.isAlive())
 							t.stop();
 						System.out.print("O");
+						failed[j] = true;
 
 						output += "-1,-1";
 					} else {
