@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.zip.DataFormatException;
-
-import distance.DistanceMeasurement;
 import distance.FrechetApprox;
 import line.PolyLine;
 import simplification.ExactSimplification;
@@ -20,7 +18,7 @@ import simplification.RandomSimplification;
 import util.Tuple;
 import util.Util;
 
-public class CompareSimplifiers {
+public class CompareFrechetApprox {
 
 	private static LineSimplifier[] simplifiers = { new InOrderSimplification(), new RandomSimplification(),
 			new MinHopSimplifier(), new GreedySimplification(), new ExactSimplification() };
@@ -31,35 +29,20 @@ public class CompareSimplifiers {
 	public static void main(String[] args) throws IOException {
 		if (args.length < 2) {
 			throw new IllegalArgumentException(
-					"Arguments must be given by: <lineDirectory> <distanceType> <optimal:distanceArgument>");
+					"Arguments must be given by: <lineDirectory> <commaSeparatedK> <numberLines>");
 		}
 
 		String directoryPath = args[0];
-		String errorType = args[1];
+		String[] kString = args[1].split(",");
+
+		int numberLines = Integer.MAX_VALUE;
+		if (args.length >= 3)
+			numberLines = Integer.valueOf(args[2]);
 
 		File directory = new File(directoryPath);
 
 		if (!directory.isDirectory()) {
 			throw new IllegalArgumentException("File is not a directory");
-		}
-
-		DistanceMeasurement distance = Util.fromStringToDistance(errorType);
-		if (distance == null) {
-			throw new IllegalArgumentException("Distance not found, available: " + Util.getAvailableDistances());
-		}
-
-		if (args.length > 2) {
-			if (distance instanceof FrechetApprox) {
-				try {
-					int i = Integer.parseInt(args[2]);
-					if (i <= 0) {
-						throw new IllegalArgumentException("distanceArgument must be greater than 0");
-					}
-					((FrechetApprox) distance).setIterations(i);
-				} catch (NumberFormatException e) {
-					throw new IllegalArgumentException("distanceArgument is not an integer");
-				}
-			}
 		}
 
 		String path = directoryPath + File.separator + "_output.csv";
@@ -74,11 +57,14 @@ public class CompareSimplifiers {
 
 		String header = "lineFile,length,";
 		for (int i = 0; i < simplifiers.length; i++) {
-			LineSimplifier simplifier = simplifiers[i];
-			header += simplifier.toString() + "-distance," + simplifier.toString() + "-time";
+			for (int j = 0; j < kString.length; j++) {
+				LineSimplifier simplifier = simplifiers[i];
+				header += simplifier.toString() + "-distance at k=" + kString[j] + "," + simplifier.toString()
+						+ "-time at k=" + kString[j];
 
-			if (i != simplifiers.length - 1) {
-				header += ",";
+				if (i != simplifiers.length - 1 || j != kString.length - 1) {
+					header += ",";
+				}
 			}
 		}
 		writer.write(header + "\n");
@@ -112,8 +98,8 @@ public class CompareSimplifiers {
 			}
 		});
 		int cur = 0;
-		boolean[] failed = new boolean[simplifiers.length];
-		for (int i = 0; i < files.length; i++) {
+		boolean[] failed = new boolean[simplifiers.length * kString.length];
+		for (int i = 0; i < Math.min(files.length, numberLines); i++) {
 			File lineFile = files[i];
 
 			String lineName = lineFile.getName();
@@ -131,42 +117,48 @@ public class CompareSimplifiers {
 				String output = lineName + "," + line.length() + ",";
 
 				for (int j = 0; j < simplifiers.length; j++) {
-					LineSimplifier simplifier = simplifiers[j];
-					solution = null;
+					for (int curk = 0; curk < kString.length; curk++) {
+						LineSimplifier simplifier = simplifiers[j];
+						solution = null;
 
-					Thread t = new Thread(new Runnable() {
+						int curK = curk;
+						Thread t = new Thread(new Runnable() {
+							int k = Integer.valueOf(kString[curK]);
 
-						@Override
-						public void run() {
-							solution = Util.computeWithTime(line, simplifier, distance);
+							@Override
+							public void run() {
+								solution = Util.computeWithTime(line, simplifier, new FrechetApprox(k));
+							}
+						});
+
+						int failedIndex = j * kString.length + curk;
+
+						if (!failed[failedIndex]) {
+
+							t.start();
+
+							t.join(900000);
 						}
-					});
-					
-					if (!failed[j]) {
 
-						t.start();
+						if (solution == null) {
+							if (t.isAlive())
+								t.stop();
+							System.out.print("O");
+							failed[failedIndex] = true;
 
-						t.join(900000);
-					}
+							output += "-1,-1";
+						} else {
+							System.out.print("|");
 
-					if (solution == null) {
-						if (t.isAlive())
-							t.stop();
-						System.out.print("O");
-						failed[j] = true;
+							double error = solution.l;
+							double time = solution.r;
 
-						output += "-1,-1";
-					} else {
-						System.out.print("|");
+							output += error + "," + time;
+						}
 
-						double error = solution.l;
-						double time = solution.r;
-
-						output += error + "," + time;
-					}
-
-					if (j != simplifiers.length - 1) {
-						output += ",";
+						if (j != simplifiers.length - 1) {
+							output += ",";
+						}
 					}
 
 				}
