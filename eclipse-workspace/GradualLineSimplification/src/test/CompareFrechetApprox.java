@@ -20,8 +20,7 @@ import util.Util;
 
 public class CompareFrechetApprox {
 
-	private static LineSimplifier[] simplifiers = { new InOrderSimplification(), new RandomSimplification(),
-			new MinHopSimplifier(), new GreedySimplification(), new ExactSimplification() };
+	private static LineSimplifier[] simplifiers = { new ExactSimplification() };
 
 	private static Tuple<Double, Double> solution = null;
 
