@@ -107,9 +107,6 @@ public class Frechet implements DistanceMeasurement {
 
 		// check bounds
 		if (tBetween >= tp || tBetween <= tq) {
-			// System.out.println("No intersection between " + (i + from + 1) + " and " + (j
-			// + from + 1)
-			// + " at t = " + tBetween);
 			return null;
 		}
 

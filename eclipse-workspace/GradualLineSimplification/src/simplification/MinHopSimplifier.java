@@ -21,7 +21,7 @@ public class MinHopSimplifier implements LineSimplifier {
 			levels[i] = new ArrayList<>();
 		}
 
-		createBinTree(levels, 1, length - 2);
+		createLevelsOfTree(levels, 1, length - 2);
 
 		int i = 0;
 		for (List<Integer> level : levels) {
@@ -34,30 +34,21 @@ public class MinHopSimplifier implements LineSimplifier {
 		return new Tuple<>(simplification, null);
 	}
 
-	private int createBinTree(List<Integer>[] levels, int l, int r) {
+	private int createLevelsOfTree(List<Integer>[] levels, int l, int r) {
 
 		if (l > r) {
 			return 0;
 		}
 
 		if (l == r) {
-//			System.out.println(i + ": " + l + " " + r + " " + l);
-//			System.out.println(i + " val: " + l);
 			levels[0].add(0, l);
 			return 1;
 		}
 
 		int mid = (l + r) / 2;
-
-//		System.out.println(i + ": " + l + " " + r + " " + mid);
-//
-//		System.out.println(i + " val: " + mid);
-//
-//		System.out.println(i + "\t" + l + " " + (mid-1));
-		int depthLeft = createBinTree(levels, l, mid - 1);
-
-//		System.out.println(i + "\t" + (mid + 1) + " " + r);
-		int depthRight = createBinTree(levels, mid + 1, r);
+		
+		int depthLeft = createLevelsOfTree(levels, l, mid - 1);
+		int depthRight = createLevelsOfTree(levels, mid + 1, r);
 
 		int max = Math.max(depthLeft, depthRight);
 
@@ -68,7 +59,6 @@ public class MinHopSimplifier implements LineSimplifier {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "MinHop";
 	}
 

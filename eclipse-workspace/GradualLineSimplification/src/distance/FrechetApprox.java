@@ -60,8 +60,6 @@ public class FrechetApprox implements DistanceMeasurement {
 	public double intervalSearchIterations(PolyLine l, int from, int to, double upper, double lower) {
 		for (int i = 0; i < iterations; i++) {
 			double mid = (upper + lower) / 2.0;
-			//System.out.println(upper + " " + lower + " " + mid);
-			// System.out.println(i);
 			if (Frechet.test(l, from, to, mid, 0.0)) {
 				upper = mid;
 			} else {
@@ -77,7 +75,7 @@ public class FrechetApprox implements DistanceMeasurement {
 
 	@Override
 	public String toString() {
-		return "FrechetApprox";
+		return "FrechetApprox-" + iterations;
 	}
 
 }

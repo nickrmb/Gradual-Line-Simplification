@@ -20,7 +20,7 @@ public class RandomSimplification implements LineSimplifier {
 			simplification[i] = i + 1;
 		}
 
-		// random permutation
+		// random permutation (fisher-yates shuffle)
 		Random random = new Random();
 		for (int i = numPointsBetween - 1; i > 0; i--) {
 			int j = random.nextInt(i + 1);

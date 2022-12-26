@@ -112,7 +112,7 @@ public class CompareFrechetApprox {
 			try {
 				PolyLine line = PolyLine.readLine(lineFile);
 
-				System.out.print(cur + "/" + (files.length - 1) + " ; " + lineName + ": \t");
+				System.out.print(cur + "/" + (Math.min(files.length, numberLines) - 1) + " ; " + lineName + ": \t");
 
 				String output = lineName + "," + line.length() + ",";
 
@@ -156,7 +156,7 @@ public class CompareFrechetApprox {
 							output += error + "," + time;
 						}
 
-						if (j != simplifiers.length - 1) {
+						if (j != simplifiers.length - 1 || curk != kString.length - 1) {
 							output += ",";
 						}
 					}
