@@ -22,8 +22,9 @@ import util.Util;
 
 public class CompareSimplifiers {
 
-	private static LineSimplifier[] simplifiers = { new InOrderSimplification(), new RandomSimplification(),
-			new MinHopSimplifier(), new GreedySimplification(), new ExactSimplification() };
+	private static LineSimplifier[] simplifiers = { //new InOrderSimplification(), new RandomSimplification(),
+			new MinHopSimplifier()//, new GreedySimplification(), new ExactSimplification()
+			};
 
 	private static Tuple<Double, Double> solution = null;
 

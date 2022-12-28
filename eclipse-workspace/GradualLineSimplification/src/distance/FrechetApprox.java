@@ -75,7 +75,7 @@ public class FrechetApprox implements DistanceMeasurement {
 
 	@Override
 	public String toString() {
-		return "FrechetApprox-" + iterations;
+		return "FrechetApprox";
 	}
 
 }
