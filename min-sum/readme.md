@@ -13,7 +13,7 @@ There are multiple simplifiers available:
 - Random: A random simplification that runs in $\mathcal{O}(n)$
 - Equal: Also a heuristic that runs in $\mathcal{O}(n)$
 
-Where $f_X$ denotes the runtime function of $X$. <br>
+Where $f_X$ denotes the runtime function of distance measure $X$. <br>
 
 Also multiple distance measures are available:
 - Hausdorff: The [Hausdorff distance](https://en.wikipedia.org/wiki/Hausdorff_distance) with runtime $\mathcal{O}(n)$
