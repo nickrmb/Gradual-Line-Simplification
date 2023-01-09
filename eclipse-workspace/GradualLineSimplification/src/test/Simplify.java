@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 
-import distance.DistanceMeasurement;
+import distance.DistanceMeasure;
 import distance.FrechetApprox;
 import line.PolyLine;
 import simplification.LineSimplifier;
@@ -14,11 +14,11 @@ import util.Util;
 public class Simplify {
 
 	public static void main(String[] args) throws NumberFormatException, IOException, DataFormatException {
-		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasurement> fromArgs = Simplify.getFromArgs(args);
+		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasure> fromArgs = Simplify.getFromArgs(args);
 
 		PolyLine line = fromArgs.l.l;
 		LineSimplifier simplifier = fromArgs.l.r;
-		DistanceMeasurement distance = fromArgs.r;
+		DistanceMeasure distance = fromArgs.r;
 
 		long t1 = System.nanoTime();
 		Tuple<int[], double[]> solution = simplifier.simplify(line, distance);
@@ -41,16 +41,30 @@ public class Simplify {
 		System.out.println("Line: " + lineName);
 		System.out.println("Summed-" + distance.toString() + "-Distance: " + error);
 		System.out.println("Computed in: " + time + " ms");
-		for(int i = 0; i < simplification.length; i++) {
-			System.out.print(simplification[i]);
-			if(i != simplification.length - 1) {
-				System.out.print(", ");
+
+		boolean printsRemoval = false;
+
+		for (String s : args) {
+			if (s.equalsIgnoreCase("removal")) {
+				printsRemoval = true;
+				break;
 			}
+		}
+
+		if (printsRemoval) {
+			System.out.print("Removal sequence: ");
+			for (int i = 0; i < simplification.length; i++) {
+				System.out.print(simplification[i]);
+				if (i != simplification.length - 1) {
+					System.out.print(", ");
+				}
+			}
+			System.out.println();
 		}
 
 	}
 
-	protected static Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasurement> getFromArgs(String[] args)
+	protected static Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasure> getFromArgs(String[] args)
 			throws NumberFormatException, IOException, DataFormatException {
 		if (args.length < 3) {
 			throw new IllegalArgumentException(
@@ -72,7 +86,7 @@ public class Simplify {
 					"Simplifier type not found, available: " + Util.getAvailableSimplifiers());
 		}
 
-		DistanceMeasurement distance = Util.fromStringToDistance(errorType);
+		DistanceMeasure distance = Util.fromStringToDistance(errorType);
 		if (distance == null) {
 			throw new IllegalArgumentException("Distance not found, available: " + Util.getAvailableDistances());
 		}

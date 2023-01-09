@@ -1,17 +1,17 @@
 package util;
 
-import distance.DistanceMeasurement;
+import distance.DistanceMeasure;
 import line.PolyLine;
 
 public class MinNodeHeap {
 
 	private PolyLine line;
-	private DistanceMeasurement distance;
+	private DistanceMeasure distance;
 
 	private HeapNode[] heap;
 	private int length;
 
-	public MinNodeHeap(PolyLine line, DistanceMeasurement distance) {
+	public MinNodeHeap(PolyLine line, DistanceMeasure distance) {
 		length = line.length();
 		this.line = line;
 		this.distance = distance;
@@ -39,20 +39,31 @@ public class MinNodeHeap {
 		}
 	}
 
+	/**
+	 * Extracts the current minimum and reheapifies the heap
+	 * 
+	 * @return the extracted heap node
+	 */
 	public HeapNode extract() {
+		// get smallest
 		HeapNode smallest = heap[0];
 
+		// get neighbors
 		HeapNode left = smallest.left;
 		HeapNode right = smallest.right;
 
+		// get error of neighbors before
 		double leftBefore = left.error;
 		double rightBefore = right.error;
 
+		// update neighbors
 		smallest.updateAtRemove(line, distance);
 
+		// new errors of neighbors
 		double leftAfter = left.error;
 		double rightAfter = right.error;
 
+		// sink depending on direction
 		if (leftAfter < leftBefore)
 			upwardsSink(left.heapIndex);
 		if (rightAfter < rightBefore)
@@ -63,10 +74,12 @@ public class MinNodeHeap {
 		if (rightAfter > rightBefore)
 			downwardsSink(right.heapIndex);
 
+		// update heap
 		length--;
 		swap(0, length);
 		downwardsSink(0);
 
+		// return extracted node
 		return heap[length];
 	}
 

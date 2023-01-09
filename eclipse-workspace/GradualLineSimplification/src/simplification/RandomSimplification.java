@@ -2,14 +2,14 @@ package simplification;
 
 import java.util.Random;
 
-import distance.DistanceMeasurement;
+import distance.DistanceMeasure;
 import line.PolyLine;
 import util.Tuple;
 
 public class RandomSimplification implements LineSimplifier {
 
 	@Override
-	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasurement distanceMeasurement) {
+	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distanceMeasurement) {
 		int length = l.length();
 		int numPointsBetween = length - 2;
 

@@ -1,17 +1,13 @@
 package distance;
 
 import line.PolyLine;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import line.Point;
-
+import line.Vertex;
 import util.Tuple;
 
-public class Frechet implements DistanceMeasurement {
+public class Frechet implements DistanceMeasure {
 
-	public static final double DELTA = 0.000000000000005; // room of error for testing
+	public static final double DELTA = 0.000000000000005; // room of error in testing
 
 	@Override
 	public double distance(PolyLine l, int from, int to) {
@@ -19,13 +15,9 @@ public class Frechet implements DistanceMeasurement {
 		List<Double> typeBErrors = hausdorff.l;
 		double[] t = hausdorff.r;
 
-		List<Double> typeCErrors = getTypeC(l, from, to, t);
-
-		double max = 0;
+		double max = getMaxTypeC(l, from, to, t);
+		;
 		for (Double error : typeBErrors)
-			max = (error > max) ? error : max;
-
-		for (Double error : typeCErrors)
 			max = (error > max) ? error : max;
 
 		return max;
@@ -40,58 +32,53 @@ public class Frechet implements DistanceMeasurement {
 	 * @param t    Array of t's where nearest Point is
 	 * @return List of errors
 	 */
-	public static List<Double> getTypeC(PolyLine l, int from, int to, double[] t) {
-		List<Double> errors = new ArrayList<>();
+	public static double getMaxTypeC(PolyLine l, int from, int to, double[] t) {
 
-		Point a = l.getPoint(from);
-		Point b = l.getPoint(to);
-
-		boolean abDuplicates = false;
+		Vertex a = l.getPoint(from);
+		Vertex b = l.getPoint(to);
 
 		if (a.squaredDistanceTo(b) == 0.0) {
-			abDuplicates = true;
+			return 0;
 		}
 
-		if (abDuplicates) {
-			return errors;
-		}
+		double max = 0.0;
 
 		// type c (new passage opens)
 		for (int i = 0; i < t.length - 1; i++) {
 			for (int j = i + 1; j < t.length; j++) {
 				if (t[i] > t[j]) {
-					Point p = l.getPoint(from + 1 + i);
-					Point q = l.getPoint(from + 1 + j);
+					Vertex p = l.getPoint(from + 1 + i);
+					Vertex q = l.getPoint(from + 1 + j);
 
-					Tuple<Point, Double> nearestCommon = nearestCommonPointOnSegmentBetween(a, b, p, q, t[i], t[j]);
+					Tuple<Vertex, Double> nearestCommon = nearestCommonPointOnSegmentBetween(a, b, p, q, t[i], t[j]);
 
 					if (nearestCommon != null) {
-						errors.add(p.distanceTo(nearestCommon.l));
-						//System.out.println("Intersection between " + (i + from + 1) + " and " + (j + from + 1) + " at "
-						//		+ nearestCommon.l + ": " + nearestCommon.r);
+						double d = (p.distanceTo(nearestCommon.l));
+						max = (max < d) ? d : max;
 					}
 				}
 			}
 		}
 
-		return errors;
+		return max;
 	}
 
 	/**
 	 * Gets the t and error of the nearest common Point on Segment <a,b> of a Point
 	 * p and q
 	 * 
-	 * @param a The index of the point where the shortcut starts
-	 * @param b The index of the point where the shortcut ends
-	 * @param p The first point of interest
-	 * @param q The second point of interest
-	 * @param tp The t of the first point of interest (p)
-	 * @param tq The t of the second point of interest (q)
+	 * @param a  The index of the point where the shortcut starts
+	 * @param b  The index of the point where the shortcut ends
+	 * @param p  The first point of interest
+	 * @param q  The second point of interest
+	 * @param tp The nearest t of the first point of interest (p)
+	 * @param tq The nearest t of the second point of interest (q)
 	 * @return A tuple containing a point as first argument and t as second argument
-	 *         
+	 * 
 	 * @apiNote It has to hold that tp > tq
 	 */
-	private static Tuple<Point, Double> nearestCommonPointOnSegmentBetween(Point a, Point b, Point p, Point q, double tp, double tq) {
+	private static Tuple<Vertex, Double> nearestCommonPointOnSegmentBetween(Vertex a, Vertex b, Vertex p, Vertex q,
+			double tp, double tq) {
 		double ax = a.getX();
 		double ay = a.getY();
 		double bx = b.getX();
@@ -111,100 +98,11 @@ public class Frechet implements DistanceMeasurement {
 		}
 
 		// get intersection
-		Point intersection = new Point(ax + (bx - ax) * tBetween, ay + (by - ay) * tBetween);
+		Vertex intersection = new Vertex(ax + (bx - ax) * tBetween, ay + (by - ay) * tBetween);
 
 		return new Tuple<>(intersection, tBetween);
 	}
 
-	/**
-	 * Tests whether an error is valid
-	 * 
-	 * @param l     The PolyLine
-	 * @param from  The start of the shortcut
-	 * @param to    The end of the shortcut
-	 * @param error The error
-	 * @return true if valid, else false
-	 */
-	public static boolean test(PolyLine l, int from, int to, double error, double delta) {
-		double lower = 0.0;
-		double upper = 1.0;
-
-		Point a = l.getPoint(from);
-		Point b = l.getPoint(to);
-
-		double ax = a.getX();
-		double ay = a.getY();
-		double bx = b.getX();
-		double by = b.getY();
-
-		boolean abDuplicates = false;
-
-		if (a.squaredDistanceTo(b) == 0.0) {
-			abDuplicates = true;
-		}
-
-		// go through all points in between
-		for (int i = from + 1; i < to; i++) {
-			Point p = l.getPoint(i);
-			double px = p.getX();
-			double py = p.getY();
-
-			if (abDuplicates) {
-				if (a.distanceTo(p) > error) {
-					return false;
-				}
-				continue;
-			}
-
-			// calculate free space
-
-			// quadratic formula
-			double qa = a.squaredDistanceTo(b);
-			double qb = 2 * ((px - ax) * (ax - bx) + (py - ay) * (ay - by));
-			double qc = p.squaredDistanceTo(a) - error * error;
-
-			double qd = qb * qb - 4.0 * qa * qc;
-
-			// new free space
-			double newUpper, newLower;
-			if (qd < -delta) { // less than approx 0
-				// not in range
-				return false;
-			} else if (qd >= -delta && qd <= delta) { // approx 0
-				// exactly one intersection
-
-				// calculate new free space
-				newUpper = -qb / (2.0 * qa);
-				newLower = newUpper;
-			} else { // greater than approx 0
-				// two intersections
-
-				// calculate new free space
-				double root = Math.sqrt(qd);
-				newUpper = (-qb + root) / (2.0 * qa);
-				newLower = (-qb - root) / (2.0 * qa);
-
-			}
-
-			// check intersection validity
-			if ((newUpper < 0.0 && newLower < 0.0) || (newUpper > 1.0 && newLower > 1.0)) {
-				return false;
-			}
-
-			// update free space
-			upper = Math.min(newUpper, 1.0);
-			lower = Math.max(lower, newLower);
-
-			// check free space validity
-			if (lower - upper > delta) {
-				return false;
-			}
-
-		}
-
-		return true;
-	}
-	
 	@Override
 	public String toString() {
 		return "Frechet";

@@ -3,11 +3,11 @@ package distance;
 import java.util.ArrayList;
 import java.util.List;
 
-import line.Point;
+import line.Vertex;
 import line.PolyLine;
 import util.Tuple;
 
-public class Hausdorff implements DistanceMeasurement {
+public class Hausdorff implements DistanceMeasure {
 
 	@Override
 	public double distance(PolyLine l, int from, int to) {
@@ -33,8 +33,8 @@ public class Hausdorff implements DistanceMeasurement {
 		List<Double> errors = new ArrayList<Double>();
 		double[] t = new double[to - from - 1]; // arrays holding which t is next to each point, t in [0;1]
 
-		Point a = l.getPoint(from);
-		Point b = l.getPoint(to);
+		Vertex a = l.getPoint(from);
+		Vertex b = l.getPoint(to);
 
 		boolean abDuplicates = false;
 
@@ -44,14 +44,14 @@ public class Hausdorff implements DistanceMeasurement {
 
 		// type b (shortest distance to line)
 		for (int i = from + 1; i < to; i++) {
-			Point p = l.getPoint(i);
+			Vertex p = l.getPoint(i);
 
 			if (abDuplicates) {
 				errors.add(a.distanceTo(p));
 				continue;
 			}
 
-			Tuple<Point, Double> nearest = nearestPointOnSegment(a, b, p);
+			Tuple<Vertex, Double> nearest = nearestPointOnSegment(a, b, p);
 
 			t[i - from - 1] = nearest.r;
 			errors.add(p.distanceTo(nearest.l));
@@ -71,7 +71,7 @@ public class Hausdorff implements DistanceMeasurement {
 	 * @return A tuple containing t as first argument and the error as second
 	 *         argument
 	 */
-	private static Tuple<Point, Double> nearestPointOnSegment(Point a, Point b, Point p) {
+	private static Tuple<Vertex, Double> nearestPointOnSegment(Vertex a, Vertex b, Vertex p) {
 		double ax = a.getX();
 		double ay = a.getY();
 		double bx = b.getX();
@@ -80,7 +80,7 @@ public class Hausdorff implements DistanceMeasurement {
 		double py = p.getY();
 
 		double pt = ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / a.squaredDistanceTo(b);
-		Point nearestPoint;
+		Vertex nearestPoint;
 		// check bounds
 		if (pt <= 0.0) {
 			pt = 0.0;
@@ -89,7 +89,7 @@ public class Hausdorff implements DistanceMeasurement {
 			pt = 1.0;
 			nearestPoint = b;
 		} else {
-			nearestPoint = new Point(ax + (bx - ax) * pt, ay + (by - ay) * pt);
+			nearestPoint = new Vertex(ax + (bx - ax) * pt, ay + (by - ay) * pt);
 		}
 
 		return new Tuple<>(nearestPoint, pt);

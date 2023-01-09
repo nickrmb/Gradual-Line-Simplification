@@ -8,16 +8,16 @@ import java.util.zip.DataFormatException;
 
 public class PolyLine {
 
-	private Point[] points;
+	private Vertex[] vertices;
 	private boolean[] isRemoved;
 	private int active;
 
-	public PolyLine(Point[] points) {
-		if (points.length <= 1)
+	public PolyLine(Vertex[] vertices) {
+		if (vertices.length <= 1)
 			throw new IllegalArgumentException("Line must have at least 2 Points");
-		this.points = points;
+		this.vertices = vertices;
 
-		active = points.length;
+		active = vertices.length;
 		isRemoved = new boolean[active];
 	}
 
@@ -27,7 +27,7 @@ public class PolyLine {
 	 * @param i the index of the point
 	 */
 	public void remove(int i) {
-		if (i == 0 || i == points.length - 1) {
+		if (i == 0 || i == vertices.length - 1) {
 			throw new IllegalArgumentException("Cannot remove first or last point");
 		}
 		if (isRemoved[i]) {
@@ -60,8 +60,8 @@ public class PolyLine {
 	 * @param i The index of the point
 	 * @return points[i]
 	 */
-	public Point getPoint(int i) {
-		return points[i];
+	public Vertex getPoint(int i) {
+		return vertices[i];
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class PolyLine {
 	 * Resets the line. Activates all Points; Resets active counter.
 	 */
 	public void reset() {
-		active = points.length;
+		active = vertices.length;
 		isRemoved = new boolean[active];
 	}
 
@@ -108,7 +108,7 @@ public class PolyLine {
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 
 		int numberPoints = Integer.parseInt(reader.readLine());
-		Point[] points = new Point[numberPoints];
+		Vertex[] points = new Vertex[numberPoints];
 
 		double sx = 0, sy = 0;
 
@@ -128,7 +128,7 @@ public class PolyLine {
 				sy = y;
 			}
 
-			points[i] = new Point(x - sx, y - sy);
+			points[i] = new Vertex(x - sx, y - sy);
 		}
 
 		return new PolyLine(points);
@@ -140,7 +140,7 @@ public class PolyLine {
 	 * @return number points
 	 */
 	public int length() {
-		return points.length;
+		return vertices.length;
 	}
 
 }

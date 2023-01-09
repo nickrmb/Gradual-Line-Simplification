@@ -2,7 +2,7 @@ package distance;
 
 import line.PolyLine;
 
-public interface DistanceMeasurement {
+public interface DistanceMeasure {
 	
 	
 	/**

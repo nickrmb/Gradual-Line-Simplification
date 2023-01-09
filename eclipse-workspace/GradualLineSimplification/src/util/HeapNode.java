@@ -1,6 +1,6 @@
 package util;
 
-import distance.DistanceMeasurement;
+import distance.DistanceMeasure;
 import line.PolyLine;
 
 public class HeapNode implements Comparable<HeapNode> {
@@ -15,7 +15,13 @@ public class HeapNode implements Comparable<HeapNode> {
 		heapIndex = index;
 	}
 
-	public void calculateError(PolyLine l, DistanceMeasurement distance) {
+	/**
+	 * get removal error of node
+	 * 
+	 * @param l        The PolyLine
+	 * @param distance The distance measure
+	 */
+	public void calculateError(PolyLine l, DistanceMeasure distance) {
 		if (left == null || right == null) {
 			error = Double.MAX_VALUE;
 			return;
@@ -25,7 +31,13 @@ public class HeapNode implements Comparable<HeapNode> {
 			error = distance.distance(l, left.index, right.index);
 	}
 
-	public void updateAtRemove(PolyLine l, DistanceMeasurement distance) {
+	/**
+	 * update neighbors of neighbors and their removal error
+	 * 
+	 * @param l        The PolyLine
+	 * @param distance The distance Measure
+	 */
+	public void updateAtRemove(PolyLine l, DistanceMeasure distance) {
 		left.right = right;
 		right.left = left;
 

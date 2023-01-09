@@ -8,14 +8,14 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.zip.DataFormatException;
 
-import distance.DistanceMeasurement;
+import distance.DistanceMeasure;
 import distance.FrechetApprox;
 import line.PolyLine;
 import simplification.ExactSimplification;
 import simplification.GreedySimplification;
 import simplification.InOrderSimplification;
 import simplification.LineSimplifier;
-import simplification.MinHopSimplifier;
+import simplification.EqualSimplifier;
 import simplification.RandomSimplification;
 import util.Tuple;
 import util.Util;
@@ -23,7 +23,7 @@ import util.Util;
 public class CompareSimplifiers {
 
 	private static LineSimplifier[] simplifiers = { new InOrderSimplification(), new RandomSimplification(),
-			new MinHopSimplifier(), new GreedySimplification(), new ExactSimplification()
+			new EqualSimplifier(), new GreedySimplification(), new ExactSimplification()
 			};
 
 	private static Tuple<Double, Double> solution = null;
@@ -44,7 +44,7 @@ public class CompareSimplifiers {
 			throw new IllegalArgumentException("File is not a directory");
 		}
 
-		DistanceMeasurement distance = Util.fromStringToDistance(errorType);
+		DistanceMeasure distance = Util.fromStringToDistance(errorType);
 		if (distance == null) {
 			throw new IllegalArgumentException("Distance not found, available: " + Util.getAvailableDistances());
 		}

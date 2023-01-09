@@ -31,8 +31,8 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import distance.DistanceMeasurement;
-import line.Point;
+import distance.DistanceMeasure;
+import line.Vertex;
 import line.PolyLine;
 import simplification.LineSimplifier;
 import util.Tuple;
@@ -52,11 +52,11 @@ public class Visualizer extends JFrame {
 	private int cur = 0;
 
 	public static void main(String[] args) throws NumberFormatException, IOException, DataFormatException {
-		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasurement> fromArgs = Simplify.getFromArgs(args);
+		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasure> fromArgs = Simplify.getFromArgs(args);
 
 		PolyLine line = fromArgs.l.l;
 		LineSimplifier simplifier = fromArgs.l.r;
-		DistanceMeasurement distance = fromArgs.r;
+		DistanceMeasure distance = fromArgs.r;
 
 		Tuple<int[], double[]> solution = simplifier.simplify(line, distance);
 		if (solution.r == null)
@@ -85,7 +85,7 @@ public class Visualizer extends JFrame {
 		double minX = Double.MAX_VALUE, maxX = -Double.MAX_VALUE, minY = Double.MAX_VALUE, maxY = -Double.MAX_VALUE;
 
 		for (int i = 0; i < l.length(); i++) {
-			Point p = l.getPoint(i);
+			Vertex p = l.getPoint(i);
 			double x = p.getX();
 			double y = p.getY();
 
@@ -101,7 +101,7 @@ public class Visualizer extends JFrame {
 		double span = (spanX > spanY) ? spanX : spanY;
 
 		for (int i = 0; i < l.length(); i++) {
-			Point p = l.getPoint(i);
+			Vertex p = l.getPoint(i);
 
 			double newX = marginInDrawing
 					+ ((span - spanX) / 2 + (p.getX() - minX)) / span * (drawPanelSize - 2 * marginInDrawing);
@@ -137,7 +137,7 @@ public class Visualizer extends JFrame {
 				g.drawRect(0, 0, drawPanelSize, drawPanelSize);
 
 				// draw line
-				Point before = l.getPoint(0);
+				Vertex before = l.getPoint(0);
 				boolean beforeActive = true;
 				int lastNonRemoved = 0;
 
@@ -149,14 +149,14 @@ public class Visualizer extends JFrame {
 						g.setColor(Color.LIGHT_GRAY);
 					}
 
-					Point cur = l.getPoint(i);
+					Vertex cur = l.getPoint(i);
 
 					g.drawLine((int) before.getX(), (int) before.getY(), (int) cur.getX(), (int) cur.getY());
 
 					if (isActive) {
 						if (lastNonRemoved != i - 1) {
 							g.setColor(Color.BLUE);
-							Point last = l.getPoint(lastNonRemoved);
+							Vertex last = l.getPoint(lastNonRemoved);
 							g.drawLine((int) last.getX(), (int) last.getY(), (int) cur.getX(), (int) cur.getY());
 
 						}
@@ -179,7 +179,7 @@ public class Visualizer extends JFrame {
 						g.setColor(Color.GRAY);
 					}
 
-					Point p = l.getPoint(i);
+					Vertex p = l.getPoint(i);
 
 					g.fillOval((int) p.getX() - pointSize / 2, (int) p.getY() - pointSize / 2, pointSize, pointSize);
 				}
@@ -334,7 +334,7 @@ public class Visualizer extends JFrame {
 				g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
 				// draw line
-				Point before = l.getPoint(0);
+				Vertex before = l.getPoint(0);
 				boolean beforeActive = true;
 				int lastNonRemoved = 0;
 
@@ -346,14 +346,14 @@ public class Visualizer extends JFrame {
 						g.setColor(Color.LIGHT_GRAY);
 					}
 
-					Point cur = l.getPoint(i);
+					Vertex cur = l.getPoint(i);
 
 					g.drawLine((int) before.getX(), (int) before.getY(), (int) cur.getX(), (int) cur.getY());
 
 					if (isActive) {
 						if (lastNonRemoved != i - 1) {
 							g.setColor(Color.BLUE);
-							Point last = l.getPoint(lastNonRemoved);
+							Vertex last = l.getPoint(lastNonRemoved);
 							g.drawLine((int) last.getX(), (int) last.getY(), (int) cur.getX(), (int) cur.getY());
 
 						}
@@ -375,7 +375,7 @@ public class Visualizer extends JFrame {
 							g.setColor(Color.GRAY);
 						}
 
-						Point p = l.getPoint(i);
+						Vertex p = l.getPoint(i);
 
 						g.fillOval((int) p.getX() - pointSize / 2, (int) p.getY() - pointSize / 2, pointSize,
 								pointSize);

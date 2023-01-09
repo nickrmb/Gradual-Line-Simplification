@@ -1,6 +1,6 @@
 package util;
 
-import distance.DistanceMeasurement;
+import distance.DistanceMeasure;
 import distance.Frechet;
 import distance.FrechetApprox;
 import distance.Hausdorff;
@@ -9,17 +9,29 @@ import simplification.ExactSimplification;
 import simplification.GreedySimplification;
 import simplification.InOrderSimplification;
 import simplification.LineSimplifier;
-import simplification.MinHopSimplifier;
+import simplification.EqualSimplifier;
 import simplification.RandomSimplification;
 
+/**
+ * @author nick
+ *
+ */
 public class Util {
 
-	private static DistanceMeasurement[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
+	private static DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
 	private static LineSimplifier[] simplifiers = { new ExactSimplification(), new GreedySimplification(),
-			new InOrderSimplification(), new MinHopSimplifier(), new RandomSimplification() };
+			new InOrderSimplification(), new EqualSimplifier(), new RandomSimplification() };
 
+	/**
+	 * Returns the error in each simplificaiton step from a removal sequence
+	 * 
+	 * @param simplification      The removal sequence
+	 * @param l                   The polyline
+	 * @param distanceMeasurement The distance measure
+	 * @return The summed error in each simplification step
+	 */
 	public static double[] errorFromSimplification(int[] simplification, PolyLine l,
-			DistanceMeasurement distanceMeasurement) {
+			DistanceMeasure distanceMeasurement) {
 
 		int length = l.length();
 		int numPointsBetween = length - 2;
@@ -50,15 +62,27 @@ public class Util {
 		return error;
 	}
 
-	public static DistanceMeasurement fromStringToDistance(String s) {
+	/**
+	 * Gets a distance instance of a distance measure from a string
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static DistanceMeasure fromStringToDistance(String s) {
 
-		for (DistanceMeasurement distance : distances)
+		for (DistanceMeasure distance : distances)
 			if (s.equalsIgnoreCase(distance.toString()))
 				return distance;
 		return null;
 
 	}
 
+	/**
+	 * Gets a simplifier instance from a string
+	 * 
+	 * @param s
+	 * @return
+	 */
 	public static LineSimplifier fromStringToSimplifier(String s) {
 
 		for (LineSimplifier simplifier : simplifiers)
@@ -68,6 +92,11 @@ public class Util {
 
 	}
 
+	/**
+	 * Gets a string containing a list of names of available distance measures
+	 * 
+	 * @return
+	 */
 	public static String getAvailableDistances() {
 		String list = "";
 		for (int i = 0; i < distances.length; i++) {
@@ -78,6 +107,11 @@ public class Util {
 		return list;
 	}
 
+	/**
+	 * Gets a string containing a list of names of available simplifiers
+	 * 
+	 * @return
+	 */
 	public static String getAvailableSimplifiers() {
 		String list = "";
 		for (int i = 0; i < simplifiers.length; i++) {
@@ -88,8 +122,16 @@ public class Util {
 		return list;
 	}
 
+	/**
+	 * Computes the error of a simplifier applied on a line
+	 * 
+	 * @param line       The polyline
+	 * @param simplifier The simplifier
+	 * @param distance   The distance measure used
+	 * @return a tuple containing the error (left) and time (right)
+	 */
 	public static Tuple<Double, Double> computeWithTime(PolyLine line, LineSimplifier simplifier,
-			DistanceMeasurement distance) {
+			DistanceMeasure distance) {
 		long t1 = System.nanoTime();
 		Tuple<int[], double[]> solution = simplifier.simplify(line, distance);
 		long t2 = System.nanoTime();

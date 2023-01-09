@@ -10,11 +10,7 @@ import java.util.zip.DataFormatException;
 import distance.FrechetApprox;
 import line.PolyLine;
 import simplification.ExactSimplification;
-import simplification.GreedySimplification;
-import simplification.InOrderSimplification;
 import simplification.LineSimplifier;
-import simplification.MinHopSimplifier;
-import simplification.RandomSimplification;
 import util.Tuple;
 import util.Util;
 
