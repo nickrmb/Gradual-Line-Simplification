@@ -5,6 +5,8 @@ in many different applications. There already exist
 many progressive line simplification algorithms that
 simplify a polygonal line into different level of details.
 
+<img src="misc/simplification.png" width=100%>
+
 In this work we will deal with another approach of
 simplifying, so called gradual line simplification. It
 asks for simplifications such that we repeatedly re-
