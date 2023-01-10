@@ -47,8 +47,8 @@ Possible calls could be:
     java -jar tests/Visualizer.jar ../data/l1.sgpx inorder frechet
     java -jar tests/Visualizer.jar ../data/l2.sgpx greedy frechetapprox 10
     java -jar tests/Visualizer.jar ../data/l3.sgpx exact hausdorff
-    java -jar tests/Visualizer.jar ../data/424.sgpx random frechetapprox 10
-    java -jar tests/Visualizer.jar ../data/3151.sgpx equal hausdorff
+    java -jar tests/Visualizer.jar ../data/l1.sgpx random frechetapprox 10
+    java -jar tests/Visualizer.jar ../data/l2.sgpx equal hausdorff
 
 Note: only .sgpx files are supported. See [here](../data/) to see some sample lines.
 Or see [here](../util/) to learn about converting .gpx files to .sgpx files.
