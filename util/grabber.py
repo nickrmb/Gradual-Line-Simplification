@@ -21,6 +21,8 @@ def grab(fromPage, toPage, targetDirectory):
             trace = split[2]
             if len(trace) != 7: continue
 
+            print('Cloning', trace)
+
             downloadUrl = 'https://www.openstreetmap.org/trace/' + str(trace) + '/data';
 
             downloadRes = requests.get(downloadUrl)
@@ -46,9 +48,10 @@ def grab(fromPage, toPage, targetDirectory):
             simplified = simplifier.simplifyData(data)
             
             length = len(simplified)
-            path = targetDirectory + str(length) + ".sgpx"
+            path = targetDirectory + trace + ".sgpx"
             if exists(path):
                 continue
+
 
             out = open(path, "w")
 

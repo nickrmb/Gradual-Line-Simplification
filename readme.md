@@ -9,8 +9,7 @@ simplify a polygonal line into different level of details.
 
 In this work we will deal with another approach of
 simplifying, so called gradual line simplification. It
-asks for simplifications such that we repeatedly re-
-move one vertex of the line in each simplification step,
+asks for simplifications such that we repeatedly remove one vertex of the line in each simplification step,
 until we removed all vertices except the first and last
 one.
 
