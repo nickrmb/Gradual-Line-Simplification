@@ -45,5 +45,3 @@ def simplifyFile(filePath):
     
     out.close
 
-
-# simplifyFile('/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/5326431.gpx')

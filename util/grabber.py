@@ -65,7 +65,5 @@ def grab(fromPage, toPage, targetDirectory):
 
             out.close
 
-    
-# grab(105320, 105320, "/Users/nick/Documents/University/Bachelor Project/gradual-line-simplification/python-workspace/data")
 
     
