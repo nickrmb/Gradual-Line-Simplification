@@ -23,7 +23,6 @@ public class Node {
 		if (left == null || right == null) {
 			return Double.MAX_VALUE;
 		}
-
 		return distance.distance(l, left.index, right.index);
 	}
 

@@ -7,7 +7,7 @@ import java.util.zip.DataFormatException;
 import distance.DistanceMeasure;
 import distance.FrechetApprox;
 import line.PolyLine;
-import simplification.LineSimplifier;
+import simplifier.LineSimplifier;
 import util.Tuple;
 import util.Util;
 

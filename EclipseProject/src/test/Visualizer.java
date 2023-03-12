@@ -33,8 +33,9 @@ import javax.swing.event.ChangeListener;
 
 import distance.DistanceMeasure;
 import line.Vertex;
+import measure.*;
+import simplifier.LineSimplifier;
 import line.PolyLine;
-import simplification.LineSimplifier;
 import util.Tuple;
 import util.Util;
 
@@ -51,6 +52,9 @@ public class Visualizer extends JFrame {
 
 	private int cur = 0;
 
+	private static final Measure[] errorMeasures = { new Max(), new Sum(), new MaxActiveSum(), new MaxTotalSum(),
+			new LifespanSum(), new WeightedSum(), };
+
 	public static void main(String[] args) throws NumberFormatException, IOException, DataFormatException {
 		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasure> fromArgs = Simplify.getFromArgs(args);
 
@@ -62,12 +66,18 @@ public class Visualizer extends JFrame {
 		if (solution.r == null)
 			solution.r = Util.errorFromSimplification(solution.l, line, distance);
 
+		double[][] measures = new double[errorMeasures.length][];
+
+		for (int i = 0; i < measures.length; i++) {
+			measures[i] = errorMeasures[i].measure(solution.l, solution.r);
+		}
+
 		// start visualizer
-		new Visualizer(line, solution.l, solution.r);
+		new Visualizer(line, solution.l, solution.r, measures);
 
 	}
 
-	public Visualizer(PolyLine l, int[] simplification, double[] error) {
+	public Visualizer(PolyLine l, int[] simplification, double[] error, double[][] measures) {
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -106,8 +116,8 @@ public class Visualizer extends JFrame {
 			double newX = marginInDrawing
 					+ ((span - spanX) / 2 + (p.getX() - minX)) / span * (drawPanelSize - 2 * marginInDrawing);
 
-			double newY = marginInDrawing
-					+ ((span - spanY) / 2 + (p.getY() - minY)) / span * (drawPanelSize - 2 * marginInDrawing);
+			double newY = marginInDrawing + (drawPanelSize - 2 * marginInDrawing)
+					- +((span - spanY) / 2 + (p.getY() - minY)) / span * (drawPanelSize - 2 * marginInDrawing);
 
 			p.setX(newX);
 			p.setY(newY);
@@ -203,7 +213,7 @@ public class Visualizer extends JFrame {
 
 		curText.setLocation(drawPanel.getX() + textMargin, getHeight() - getInsets().top - textHeight - margin);
 
-		curText.setSize(drawPanelSize, 20);
+		curText.setSize(drawPanelSize * 2, 20);
 
 		l.reset();
 
@@ -228,7 +238,7 @@ public class Visualizer extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				int value = slider.getValue();
 
-				update(value, l, simplification, error, curText, nField, drawPanel, null);
+				update(value, l, simplification, error, curText, nField, drawPanel, null, measures);
 
 			}
 		};
@@ -249,7 +259,7 @@ public class Visualizer extends JFrame {
 				if (n < 2)
 					n = 2;
 
-				update(l.length() - n, l, simplification, error, curText, nField, drawPanel, slider);
+				update(l.length() - n, l, simplification, error, curText, nField, drawPanel, slider, measures);
 
 			}
 
@@ -405,7 +415,7 @@ public class Visualizer extends JFrame {
 	}
 
 	private void update(int value, PolyLine l, int[] simplification, double[] error, JLabel curText, JTextField nField,
-			JPanel drawPanel, JSlider slider) {
+			JPanel drawPanel, JSlider slider, double[][] measures) {
 		if (value > cur) {
 
 			for (int i = cur + 1; i <= value; i++) {
@@ -421,13 +431,20 @@ public class Visualizer extends JFrame {
 		}
 
 		cur = value;
+		int n = (l.length() - cur);
 
 		double err = 0;
 		if (cur != 0)
 			err = error[cur - 1];
 
-		int n = (l.length() - cur);
-		curText.setText("n = " + n + "; summed error = " + err);
+		String s = "error = " + ((double) Math.round(err * 100) / 100.0);
+
+		for (int i = 0; i < measures.length; i++) {
+			s += "; " + errorMeasures[i] + " = "
+					+ (cur == 0 ? 0.0 : ((double) Math.round(measures[i][cur - 1] * 100) / 100.0));
+		}
+
+		curText.setText(s);
 
 		nField.setText("" + n);
 

@@ -1,4 +1,4 @@
-package simplification;
+package simplifier;
 
 import distance.DistanceMeasure;
 import line.PolyLine;
@@ -23,10 +23,9 @@ public class GreedySimplification implements LineSimplifier {
 		for (int i = 0; i < numPointsBetween; i++) {
 			// extract
 			HeapNode node = minHeap.extract();
-			currentError += node.error;
 
 			simplification[i] = node.index;
-			error[i] = currentError;
+			error[i] = node.error;
 		}
 
 		return new Tuple<>(simplification, error);

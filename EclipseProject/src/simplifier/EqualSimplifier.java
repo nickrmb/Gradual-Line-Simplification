@@ -1,4 +1,4 @@
-package simplification;
+package simplifier;
 
 import java.util.LinkedList;
 import java.util.Queue;

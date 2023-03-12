@@ -1,4 +1,4 @@
-package simplification;
+package simplifier;
 
 import distance.DistanceMeasure;
 import line.PolyLine;
@@ -12,7 +12,7 @@ public interface LineSimplifier {
 	 * @param l               The Polyline
 	 * @param distanceMeasure The distance measurement
 	 * @return A tuple consisting the simplification sequence and the corresponding
-	 *         error summer error according to the distance measure
+	 *         error according to the distance measure in each step
 	 */
 	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distanceMeasure);
 

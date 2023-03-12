@@ -1,4 +1,4 @@
-package simplification;
+package simplifier;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -8,7 +8,7 @@ import line.PolyLine;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class ExactSimplification implements LineSimplifier {
+public class MinSumSimplifier implements LineSimplifier {
 
 	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorShortcut;
@@ -29,7 +29,7 @@ public class ExactSimplification implements LineSimplifier {
 		// iterate through all hop distances
 		for (int hop = 2; hop < l.length(); hop++) {
 
-			// iterate through all possible pair of verties
+			// iterate through all possible pair of vertices
 			for (int i = 0; i < l.length() - hop; i++) {
 				int j = i + hop;
 
@@ -88,11 +88,9 @@ public class ExactSimplification implements LineSimplifier {
 
 		// calculate corresponding error
 
-		double err = 0.0;
 		for (int i = 0; i < numPointsBetween; i++) {
 			Tuple<Integer, Integer> cur = simpl[i];
-			err += getError(cur.l, cur.r, l, distanceMeasure);
-			error[i] = err;
+			error[i] = getError(cur.l, cur.r, l, distanceMeasure);
 		}
 
 		return new Tuple<>(simplification, error);
@@ -128,7 +126,7 @@ public class ExactSimplification implements LineSimplifier {
 
 	@Override
 	public String toString() {
-		return "Exact";
+		return "MinSum";
 	}
 
 }

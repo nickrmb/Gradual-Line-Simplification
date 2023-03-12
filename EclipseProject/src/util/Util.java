@@ -5,12 +5,20 @@ import distance.Frechet;
 import distance.FrechetApprox;
 import distance.Hausdorff;
 import line.PolyLine;
-import simplification.ExactSimplification;
-import simplification.GreedySimplification;
-import simplification.InOrderSimplification;
-import simplification.LineSimplifier;
-import simplification.EqualSimplifier;
-import simplification.RandomSimplification;
+import measure.LifespanSum;
+import measure.Max;
+import measure.MaxActiveSum;
+import measure.MaxTotalSum;
+import measure.Measure;
+import measure.Sum;
+import measure.WeightedSum;
+import simplifier.EqualSimplifier;
+import simplifier.MinSumSimplifier;
+import simplifier.GreedySimplification;
+import simplifier.InOrderSimplification;
+import simplifier.LineSimplifier;
+import simplifier.MinMaxSimplifier;
+import simplifier.RandomSimplifier;
 
 /**
  * @author nick
@@ -18,12 +26,14 @@ import simplification.RandomSimplification;
  */
 public class Util {
 
-	private static DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
-	private static LineSimplifier[] simplifiers = { new ExactSimplification(), new GreedySimplification(),
-			new InOrderSimplification(), new EqualSimplifier(), new RandomSimplification() };
-
+	private static final DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
+	private static final LineSimplifier[] simplifiers = { new MinSumSimplifier(), new MinMaxSimplifier(),
+			new GreedySimplification(), new InOrderSimplification(), new EqualSimplifier(), new RandomSimplifier() };
+	private static final Measure[] errorMeasures = { new Max(), new Sum(), new MaxActiveSum(), new MaxTotalSum(),
+			new LifespanSum(), new WeightedSum(), };
+	
 	/**
-	 * Returns the error in each simplificaiton step from a removal sequence
+	 * Returns the error in each simplification step from a removal sequence
 	 * 
 	 * @param simplification      The removal sequence
 	 * @param l                   The polyline
@@ -39,24 +49,13 @@ public class Util {
 		double[] error = new double[numPointsBetween];
 
 		// initialize nodes
-		Node[] nodes = new Node[length];
-		nodes[0] = new Node(0);
-		for (int i = 1; i < length; i++) {
-			nodes[i] = new Node(i);
-			nodes[i].left = nodes[i - 1];
-		}
-		for (int i = 0; i < length - 1; i++) {
-			nodes[i].right = nodes[i + 1];
-		}
+		Node[] nodes = createNodeArray(length);
 
 		// calculate error
-		double err = 0.0;
 		for (int i = 0; i < numPointsBetween; i++) {
 			int cur = simplification[i];
-			err += nodes[cur].calculateError(l, distanceMeasurement);
+			error[i] = nodes[cur].calculateError(l, distanceMeasurement);
 			nodes[cur].updateAtRemove();
-
-			error[i] = err;
 		}
 
 		return error;
@@ -93,6 +92,21 @@ public class Util {
 	}
 
 	/**
+	 * Gets a measure instance from a string
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static Measure fromStringToMeasure(String s) {
+
+		for (Measure measure : errorMeasures)
+			if (s.equalsIgnoreCase(measure.toString()))
+				return measure;
+		return null;
+
+	}
+
+	/**
 	 * Gets a string containing a list of names of available distance measures
 	 * 
 	 * @return
@@ -123,6 +137,21 @@ public class Util {
 	}
 
 	/**
+	 * Gets a string containing a list of names of available measures
+	 * 
+	 * @return
+	 */
+	public static String getAvailableMeasures() {
+		String list = "";
+		for (int i = 0; i < errorMeasures.length; i++) {
+			list += errorMeasures[i].toString();
+			if (i != errorMeasures.length - 1)
+				list += ", ";
+		}
+		return list;
+	}
+
+	/**
 	 * Computes the error of a simplifier applied on a line
 	 * 
 	 * @param line       The polyline
@@ -146,6 +175,19 @@ public class Util {
 
 		return new Tuple<>(solution.r[solution.r.length - 1], timeBetweenMS);
 
+	}
+
+	public static Node[] createNodeArray(int length) {
+		Node[] nodes = new Node[length];
+		nodes[0] = new Node(0);
+		for (int i = 1; i < length; i++) {
+			nodes[i] = new Node(i);
+			nodes[i].left = nodes[i - 1];
+		}
+		for (int i = 0; i < length - 1; i++) {
+			nodes[i].right = nodes[i + 1];
+		}
+		return nodes;
 	}
 
 }
