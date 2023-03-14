@@ -8,6 +8,11 @@ public class Node {
 	public Node right;
 	public int index;
 
+	// used for Greedy
+	public double error = 0;
+	public double errorLeft = 0, errorRight = 0;
+	public int leftID, rightID;
+
 	public Node(int index) {
 		this.index = index;
 	}
@@ -23,7 +28,7 @@ public class Node {
 		if (left == null || right == null) {
 			return Double.MAX_VALUE;
 		}
-		return distance.distance(l, left.index, right.index);
+		return distance.measure(l, left.index, right.index);
 	}
 
 	/**

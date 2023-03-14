@@ -10,7 +10,7 @@ import util.Tuple;
 public class EqualSimplifier implements LineSimplifier {
 
 	@Override
-	public Tuple<int[], double[]> simplify(PolyLine line, DistanceMeasure distanceMeasurement) {
+	public Tuple<int[], double[]> simplify(PolyLine line, DistanceMeasure distance) {
 		int length = line.length();
 
 		int[] simplification = new int[length - 2];

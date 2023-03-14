@@ -1,4 +1,4 @@
-package measure;
+package function;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 import util.Node;
 import util.Util;
 
-public class MaxActiveSum implements Measure {
+public class MaxActiveSum implements OptimizationFunction {
 	
 	private double[] errors;
 	

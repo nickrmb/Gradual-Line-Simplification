@@ -10,7 +10,7 @@ public class Frechet implements DistanceMeasure {
 	public static final double DELTA = 0.000000000000005; // room of error in testing
 
 	@Override
-	public double distance(PolyLine l, int from, int to) {
+	public double measure(PolyLine l, int from, int to) {
 		Tuple<List<Double>, double[]> hausdorff = Hausdorff.getTypeB(l, from, to);
 		List<Double> typeBErrors = hausdorff.l;
 		double[] t = hausdorff.r;

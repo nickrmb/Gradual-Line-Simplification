@@ -1,6 +1,6 @@
-package measure;
+package function;
 
-public class WeightedSum implements Measure {
+public class WeightedSum implements OptimizationFunction {
 
 	double[] weight;
 	

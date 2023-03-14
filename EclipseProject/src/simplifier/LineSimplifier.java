@@ -14,6 +14,6 @@ public interface LineSimplifier {
 	 * @return A tuple consisting the simplification sequence and the corresponding
 	 *         error according to the distance measure in each step
 	 */
-	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distanceMeasure);
+	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance);
 
 }

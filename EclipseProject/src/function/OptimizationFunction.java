@@ -1,6 +1,6 @@
-package measure;
+package function;
 
-public interface Measure {
+public interface OptimizationFunction {
 	
 	
 	/**

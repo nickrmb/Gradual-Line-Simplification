@@ -1,9 +1,9 @@
-package measure;
+package function;
 
 import util.Node;
 import util.Util;
 
-public class LifespanSum implements Measure {
+public class LifespanSum implements OptimizationFunction {
 
 	@Override
 	public double[] measure(int[] simplification, double[] error) {

@@ -21,7 +21,7 @@ public class FrechetApprox implements DistanceMeasure {
 	}
 
 	@Override
-	public double distance(PolyLine l, int from, int to) {
+	public double measure(PolyLine l, int from, int to) {
 		// get an upper bound
 		double upperBound = upperBound(l, from, to);
 

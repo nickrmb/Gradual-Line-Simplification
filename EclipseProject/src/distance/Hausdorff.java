@@ -10,7 +10,7 @@ import util.Tuple;
 public class Hausdorff implements DistanceMeasure {
 
 	@Override
-	public double distance(PolyLine l, int from, int to) {
+	public double measure(PolyLine l, int from, int to) {
 		Tuple<List<Double>, double[]> hausdorff = getTypeB(l, from, to);
 		List<Double> errors = hausdorff.l;
 

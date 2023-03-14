@@ -6,6 +6,8 @@ import java.util.zip.DataFormatException;
 
 import distance.DistanceMeasure;
 import distance.FrechetApprox;
+import function.OptimizationFunction;
+import function.Sum;
 import line.PolyLine;
 import simplifier.LineSimplifier;
 import util.Tuple;
@@ -31,15 +33,21 @@ public class Simplify {
 		if (solution.r == null) {
 			solution.r = Util.errorFromSimplification(solution.l, line, distance);
 		}
+		
 
-		double error = solution.r[solution.r.length - 1];
 		double time = timeBetweenMS;
 		int[] simplification = solution.l;
 
 		String lineName = new File(args[0]).getName();
 
 		System.out.println("Line: " + lineName);
-		System.out.println("Summed-" + distance.toString() + "-Distance: " + error);
+		
+		for(OptimizationFunction func : Util.optFunctions) {
+
+			double[] sequence = func.measure(simplification, solution.r);
+			System.out.println(distance.toString() + "-Distance under " + func + ": " + sequence[sequence.length - 1]);
+			
+		}
 		System.out.println("Computed in: " + time + " ms");
 
 		boolean printsRemoval = false;

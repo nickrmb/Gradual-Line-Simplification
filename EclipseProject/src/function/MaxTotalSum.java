@@ -1,6 +1,6 @@
-package measure;
+package function;
 
-public class MaxTotalSum implements Measure{
+public class MaxTotalSum implements OptimizationFunction{
 
 	@Override
 	public double[] measure(int[] simplification, double[] error) {

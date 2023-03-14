@@ -8,11 +8,12 @@ import line.PolyLine;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class MinMaxSimplifier implements LineSimplifier{
+public class MinMaxTotalSumSimplifier implements LineSimplifier {
 
-	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorShortcut;
+	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorMax;
+	private SymmetricMatrix summed;
 	private int numPointsBetween;
 
 	@Override
@@ -21,10 +22,14 @@ public class MinMaxSimplifier implements LineSimplifier{
 
 		this.errorShortcut = new SymmetricMatrix(l.length(), -1.0);
 		this.errorMax = new SymmetricMatrix(l.length(), 0);
+		this.summed = new SymmetricMatrix(l.length(), 0);
 		this.fromK = new SymmetricMatrix(l.length(), -1);
 
 		int[] simplification = new int[numPointsBetween];
 		double[] error = new double[numPointsBetween];
+
+		if (numPointsBetween == 0)
+			return new Tuple<>(simplification, error);
 
 		// iterate through all hop distances
 		for (int hop = 2; hop < l.length(); hop++) {
@@ -39,21 +44,26 @@ public class MinMaxSimplifier implements LineSimplifier{
 				if (hop == 2) {
 					fromK.setValue(i, j, i + 1);
 					errorMax.setValue(i, j, shortCutError);
+					summed.setValue(i, j, shortCutError);
 					continue;
 				}
 
 				// get minimal k
 				double min = Double.MAX_VALUE;
+				double minMax = -1;
 				int curK = -1;
 				for (int k = i + 1; k < j; k++) {
-					double dist = Math.max(errorMax.getValue(i, k), errorMax.getValue(k, j));
+					double max = Math.max(shortCutError, Math.max(errorMax.getValue(i, k), errorMax.getValue(k, j)));
+					double dist = max + summed.getValue(i, k) + summed.getValue(k, j);
 					if (dist < min) {
 						min = dist;
 						curK = k;
+						minMax = max;
 					}
 				}
-
-				errorMax.setValue(i, j, Math.max(min, shortCutError));
+				
+				errorMax.setValue(i, j, minMax);
+				summed.setValue(i, j, min);
 				fromK.setValue(i, j, curK);
 			}
 		}
@@ -100,9 +110,9 @@ public class MinMaxSimplifier implements LineSimplifier{
 	 * This method gets the shortcut error between two vertices, if shortcut is
 	 * already calculated it is accessed in constant time
 	 * 
-	 * @param i The vertex where the shortcut starts
-	 * @param j The vertex where the shortcut ends
-	 * @param l The PolyLine 
+	 * @param i               The vertex where the shortcut starts
+	 * @param j               The vertex where the shortcut ends
+	 * @param l               The PolyLine
 	 * @param distanceMeasure The distance measure used
 	 * @return
 	 */
@@ -115,7 +125,7 @@ public class MinMaxSimplifier implements LineSimplifier{
 
 		// check if calculated
 		if (errorShortcut.getValue(i, j) == -1.0) {
-			
+
 			// calculate
 			double distance = distanceMeasure.measure(l, i, j);
 			errorShortcut.setValue(i, j, distance);
@@ -126,7 +136,6 @@ public class MinMaxSimplifier implements LineSimplifier{
 
 	@Override
 	public String toString() {
-		return "MinMax";
+		return "MinMaxTotalSum";
 	}
-	
 }

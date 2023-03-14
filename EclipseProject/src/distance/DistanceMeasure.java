@@ -12,6 +12,6 @@ public interface DistanceMeasure {
 	 * @param to The index of the point where the shortcut ends
 	 * @return The shortcut error
 	 */
-	public double distance(PolyLine l, int from, int to);
+	public double measure(PolyLine l, int from, int to);
 	
 }

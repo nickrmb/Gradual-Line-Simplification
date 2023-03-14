@@ -8,6 +8,7 @@ public class HeapNode implements Comparable<HeapNode> {
 	public HeapNode right;
 	public int index;
 	protected int heapIndex;
+	
 	public double error = 0;
 
 	public HeapNode(int index) {
@@ -28,7 +29,7 @@ public class HeapNode implements Comparable<HeapNode> {
 		}
 
 		if (distance != null)
-			error = distance.distance(l, left.index, right.index);
+			error = distance.measure(l, left.index, right.index);
 	}
 
 	/**

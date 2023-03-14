@@ -32,8 +32,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import distance.DistanceMeasure;
+import function.*;
 import line.Vertex;
-import measure.*;
 import simplifier.LineSimplifier;
 import line.PolyLine;
 import util.Tuple;
@@ -52,9 +52,8 @@ public class Visualizer extends JFrame {
 
 	private int cur = 0;
 
-	private static final Measure[] errorMeasures = { new Max(), new Sum(), new MaxActiveSum(), new MaxTotalSum(),
-			new LifespanSum(), new WeightedSum(), };
-
+	private static final OptimizationFunction[] errorMeasures = { new Max(), new Sum(), new MaxActiveSum(), new MaxTotalSum(),
+			new LifespanSum(), new WeightedSum()};
 	public static void main(String[] args) throws NumberFormatException, IOException, DataFormatException {
 		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasure> fromArgs = Simplify.getFromArgs(args);
 

@@ -4,20 +4,23 @@ import distance.DistanceMeasure;
 import distance.Frechet;
 import distance.FrechetApprox;
 import distance.Hausdorff;
+import function.LifespanSum;
+import function.Max;
+import function.MaxActiveSum;
+import function.MaxTotalSum;
+import function.OptimizationFunction;
+import function.Sum;
+import function.WeightedSum;
 import line.PolyLine;
-import measure.LifespanSum;
-import measure.Max;
-import measure.MaxActiveSum;
-import measure.MaxTotalSum;
-import measure.Measure;
-import measure.Sum;
-import measure.WeightedSum;
 import simplifier.EqualSimplifier;
 import simplifier.MinSumSimplifier;
-import simplifier.GreedySimplification;
-import simplifier.InOrderSimplification;
+import simplifier.GreedyBUSimplifier;
+import simplifier.GreedyDifferenceSimplifier;
+import simplifier.GreedyTDSimplifier;
+import simplifier.InOrderSimplifier;
 import simplifier.LineSimplifier;
 import simplifier.MinMaxSimplifier;
+import simplifier.MinMaxTotalSumSimplifier;
 import simplifier.RandomSimplifier;
 
 /**
@@ -28,10 +31,11 @@ public class Util {
 
 	private static final DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
 	private static final LineSimplifier[] simplifiers = { new MinSumSimplifier(), new MinMaxSimplifier(),
-			new GreedySimplification(), new InOrderSimplification(), new EqualSimplifier(), new RandomSimplifier() };
-	private static final Measure[] errorMeasures = { new Max(), new Sum(), new MaxActiveSum(), new MaxTotalSum(),
-			new LifespanSum(), new WeightedSum(), };
-	
+			new MinMaxTotalSumSimplifier(), new GreedyBUSimplifier(), new GreedyDifferenceSimplifier(),
+			new GreedyTDSimplifier(), new InOrderSimplifier(), new EqualSimplifier(), new RandomSimplifier() };
+	public static final OptimizationFunction[] optFunctions = { new Max(), new Sum(), new MaxActiveSum(),
+			new MaxTotalSum(), new LifespanSum(), new WeightedSum(), };
+
 	/**
 	 * Returns the error in each simplification step from a removal sequence
 	 * 
@@ -97,9 +101,9 @@ public class Util {
 	 * @param s
 	 * @return
 	 */
-	public static Measure fromStringToMeasure(String s) {
+	public static OptimizationFunction fromStringToMeasure(String s) {
 
-		for (Measure measure : errorMeasures)
+		for (OptimizationFunction measure : optFunctions)
 			if (s.equalsIgnoreCase(measure.toString()))
 				return measure;
 		return null;
@@ -143,9 +147,9 @@ public class Util {
 	 */
 	public static String getAvailableMeasures() {
 		String list = "";
-		for (int i = 0; i < errorMeasures.length; i++) {
-			list += errorMeasures[i].toString();
-			if (i != errorMeasures.length - 1)
+		for (int i = 0; i < optFunctions.length; i++) {
+			list += optFunctions[i].toString();
+			if (i != optFunctions.length - 1)
 				list += ", ";
 		}
 		return list;

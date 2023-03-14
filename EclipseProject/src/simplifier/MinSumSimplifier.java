@@ -16,7 +16,7 @@ public class MinSumSimplifier implements LineSimplifier {
 	private int numPointsBetween;
 
 	@Override
-	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distanceMeasure) {
+	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {
 		numPointsBetween = l.length() - 2;
 
 		this.errorShortcut = new SymmetricMatrix(l.length(), -1.0);
@@ -34,7 +34,7 @@ public class MinSumSimplifier implements LineSimplifier {
 				int j = i + hop;
 
 				// get shortcut error
-				double shortCutError = getError(i, j, l, distanceMeasure);
+				double shortCutError = getError(i, j, l, distance);
 
 				if (hop == 2) {
 					fromK.setValue(i, j, i + 1);
@@ -90,7 +90,7 @@ public class MinSumSimplifier implements LineSimplifier {
 
 		for (int i = 0; i < numPointsBetween; i++) {
 			Tuple<Integer, Integer> cur = simpl[i];
-			error[i] = getError(cur.l, cur.r, l, distanceMeasure);
+			error[i] = getError(cur.l, cur.r, l, distance);
 		}
 
 		return new Tuple<>(simplification, error);
@@ -103,10 +103,10 @@ public class MinSumSimplifier implements LineSimplifier {
 	 * @param i The vertex where the shortcut starts
 	 * @param j The vertex where the shortcut ends
 	 * @param l The PolyLine 
-	 * @param distanceMeasure The distance measure used
+	 * @param distance The distance measure used
 	 * @return
 	 */
-	public double getError(int i, int j, PolyLine l, DistanceMeasure distanceMeasure) {
+	public double getError(int i, int j, PolyLine l, DistanceMeasure distance) {
 		// check valid
 		int diff = i - j;
 		if (diff >= -1 && diff <= 1) {
@@ -117,8 +117,8 @@ public class MinSumSimplifier implements LineSimplifier {
 		if (errorShortcut.getValue(i, j) == -1.0) {
 			
 			// calculate
-			double distance = distanceMeasure.distance(l, i, j);
-			errorShortcut.setValue(i, j, distance);
+			double error = distance.measure(l, i, j);
+			errorShortcut.setValue(i, j, error);
 		}
 
 		return errorShortcut.getValue(i, j);

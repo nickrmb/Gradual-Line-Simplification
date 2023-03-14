@@ -6,18 +6,17 @@ import util.MinNodeHeap;
 import util.HeapNode;
 import util.Tuple;
 
-public class GreedySimplification implements LineSimplifier {
+public class GreedyBUSimplifier implements LineSimplifier {
 
 	@Override
-	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distanceMeasurement) {
+	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {
 		int numPointsBetween = l.length() - 2;
 
 		int[] simplification = new int[numPointsBetween];
 		double[] error = new double[numPointsBetween];
-		double currentError = 0;
 
 		// create min node heap
-		MinNodeHeap minHeap = new MinNodeHeap(l, distanceMeasurement);
+		MinNodeHeap minHeap = new MinNodeHeap(l, distance);
 
 		// for every node between
 		for (int i = 0; i < numPointsBetween; i++) {
@@ -34,7 +33,7 @@ public class GreedySimplification implements LineSimplifier {
 	
 	@Override
 	public String toString() {
-		return "Greedy";
+		return "GreedyBU";
 	}
 
 }

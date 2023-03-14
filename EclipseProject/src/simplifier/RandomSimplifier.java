@@ -9,7 +9,7 @@ import util.Tuple;
 public class RandomSimplifier implements LineSimplifier {
 
 	@Override
-	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distanceMeasurement) {
+	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {
 		int length = l.length();
 		int numPointsBetween = length - 2;
 
