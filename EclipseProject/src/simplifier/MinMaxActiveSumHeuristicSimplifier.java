@@ -8,7 +8,7 @@ import line.PolyLine;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class MinMaxTotalSumSimplifier implements LineSimplifier {
+public class MinMaxActiveSumHeuristicSimplifier implements LineSimplifier {
 
 	private SymmetricMatrix errorShortcut;
 	private SymmetricMatrix fromK;
@@ -53,7 +53,7 @@ public class MinMaxTotalSumSimplifier implements LineSimplifier {
 				double minMax = -1;
 				int curK = -1;
 				for (int k = i + 1; k < j; k++) {
-					double max = Math.max(shortCutError, Math.max(errorMax.getValue(i, k), errorMax.getValue(k, j)));
+					double max = shortCutError;
 					double dist = max + summed.getValue(i, k) + summed.getValue(k, j);
 					if (dist < min) {
 						min = dist;
@@ -136,6 +136,6 @@ public class MinMaxTotalSumSimplifier implements LineSimplifier {
 
 	@Override
 	public String toString() {
-		return "MinMaxTotalSum";
+		return "MinMaxActiveSumHeuristic";
 	}
 }

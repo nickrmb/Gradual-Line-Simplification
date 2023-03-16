@@ -19,8 +19,10 @@ import simplifier.GreedyDifferenceSimplifier;
 import simplifier.GreedyTDSimplifier;
 import simplifier.InOrderSimplifier;
 import simplifier.LineSimplifier;
+import simplifier.MinMaxActiveSumHeuristicSimplifier;
+import simplifier.MinMaxActiveSumSimplifier;
 import simplifier.MinMaxSimplifier;
-import simplifier.MinMaxTotalSumSimplifier;
+import simplifier.MinMaxTotalSumHeuristicSimplifier;
 import simplifier.RandomSimplifier;
 
 /**
@@ -31,7 +33,8 @@ public class Util {
 
 	private static final DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
 	private static final LineSimplifier[] simplifiers = { new MinSumSimplifier(), new MinMaxSimplifier(),
-			new MinMaxTotalSumSimplifier(), new GreedyBUSimplifier(), new GreedyDifferenceSimplifier(),
+			new MinMaxActiveSumSimplifier(), new MinMaxTotalSumHeuristicSimplifier(),
+			new MinMaxActiveSumHeuristicSimplifier(), new GreedyBUSimplifier(), new GreedyDifferenceSimplifier(),
 			new GreedyTDSimplifier(), new InOrderSimplifier(), new EqualSimplifier(), new RandomSimplifier() };
 	public static final OptimizationFunction[] optFunctions = { new Max(), new Sum(), new MaxActiveSum(),
 			new MaxTotalSum(), new LifespanSum(), new WeightedSum(), };
