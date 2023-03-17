@@ -4,7 +4,7 @@ import distance.DistanceMeasure;
 import distance.Frechet;
 import distance.FrechetApprox;
 import distance.Hausdorff;
-import function.LifespanSum;
+import function.SumActiveSum;
 import function.Max;
 import function.MaxActiveSum;
 import function.MaxTotalSum;
@@ -23,6 +23,7 @@ import simplifier.MinMaxActiveSumHeuristicSimplifier;
 import simplifier.MinMaxActiveSumSimplifier;
 import simplifier.MinMaxSimplifier;
 import simplifier.MinMaxTotalSumHeuristicSimplifier;
+import simplifier.MinMaxTotalSumSimplifier;
 import simplifier.RandomSimplifier;
 
 /**
@@ -33,11 +34,11 @@ public class Util {
 
 	private static final DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
 	private static final LineSimplifier[] simplifiers = { new MinSumSimplifier(), new MinMaxSimplifier(),
-			new MinMaxActiveSumSimplifier(), new MinMaxTotalSumHeuristicSimplifier(),
+			new MinMaxActiveSumSimplifier(), new MinMaxTotalSumSimplifier(), new MinMaxTotalSumHeuristicSimplifier(),
 			new MinMaxActiveSumHeuristicSimplifier(), new GreedyBUSimplifier(), new GreedyDifferenceSimplifier(),
 			new GreedyTDSimplifier(), new InOrderSimplifier(), new EqualSimplifier(), new RandomSimplifier() };
 	public static final OptimizationFunction[] optFunctions = { new Max(), new Sum(), new MaxActiveSum(),
-			new MaxTotalSum(), new LifespanSum(), new WeightedSum(), };
+			new MaxTotalSum(), new SumActiveSum(), new WeightedSum(), };
 
 	/**
 	 * Returns the error in each simplification step from a removal sequence

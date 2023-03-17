@@ -40,15 +40,14 @@ public class Simplify {
 
 		String lineName = new File(args[0]).getName();
 
-		System.out.println("Line: " + lineName);
+		System.out.println("Simplified " + lineName + " with " + simplifier + " in " + time + " ms:");
 		
 		for(OptimizationFunction func : Util.optFunctions) {
 
 			double[] sequence = func.measure(simplification, solution.r);
-			System.out.println(distance.toString() + "-Distance under " + func + ": " + sequence[sequence.length - 1]);
+			System.out.println("\t" + distance.toString() + "-Distance under " + func + ": " + sequence[sequence.length - 1]);
 			
 		}
-		System.out.println("Computed in: " + time + " ms");
 
 		boolean printsRemoval = false;
 

@@ -53,7 +53,7 @@ public class Visualizer extends JFrame {
 	private int cur = 0;
 
 	private static final OptimizationFunction[] errorMeasures = { new Max(), new Sum(), new MaxActiveSum(), new MaxTotalSum(),
-			new LifespanSum(), new WeightedSum()};
+			new SumActiveSum(), new WeightedSum()};
 	public static void main(String[] args) throws NumberFormatException, IOException, DataFormatException {
 		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasure> fromArgs = Simplify.getFromArgs(args);
 
