@@ -3,7 +3,7 @@ package function;
 import util.Node;
 import util.Util;
 
-public class SumActiveSum implements OptimizationFunction {
+public class SumSumActive implements OptimizationFunction {
 
 	@Override
 	public double[] measure(int[] simplification, double[] error) {
@@ -30,7 +30,7 @@ public class SumActiveSum implements OptimizationFunction {
 	
 	@Override
 	public String toString() {
-		return "SumActiveSum";
+		return "SumSumActive";
 	}
 	
 

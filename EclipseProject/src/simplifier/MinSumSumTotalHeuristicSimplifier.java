@@ -2,14 +2,15 @@ package simplifier;
 
 import distance.DistanceMeasure;
 import line.PolyLine;
+import util.SC;
 import util.SymmetricMatrix;
 import util.Tuple;
-import util.SC;
 
-public class MinMaxActiveSumSimplifier implements LineSimplifier {
+public class MinSumSumTotalHeuristicSimplifier implements LineSimplifier {
 
 	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorShortcut;
+	private SymmetricMatrix errorTotal;
 	private SymmetricMatrix errorSum;
 	private int numPointsBetween;
 	private PolyLine l;
@@ -25,6 +26,7 @@ public class MinMaxActiveSumSimplifier implements LineSimplifier {
 		this.errorShortcut = new SymmetricMatrix(l.length(), -1.0);
 		this.errorSum = new SymmetricMatrix(l.length(), 0);
 		this.fromK = new SymmetricMatrix(l.length(), -1);
+		this.errorTotal = new SymmetricMatrix(l.length(), 0);
 
 		int[] simplification = new int[numPointsBetween];
 		double[] error = new double[numPointsBetween];
@@ -44,27 +46,29 @@ public class MinMaxActiveSumSimplifier implements LineSimplifier {
 				if (hop == 2) {
 					fromK.setValue(i, j, i + 1);
 					errorSum.setValue(i, j, shortCutError);
+					errorTotal.setValue(i, j, shortCutError);
 					continue;
 				}
 
 				// get minimal k
 				double min = Double.MAX_VALUE;
-				int curK = -1;
+				int minK = -1;
 				for (int k = i + 1; k < j; k++) {
-					double distSum = errorSum.getValue(i, k) + errorSum.getValue(k, j);
+					double distSum = errorTotal.getValue(i, k) + errorTotal.getValue(k, j) + errorSum.getValue(i, k) + errorSum.getValue(k, j);
 					if (distSum < min) {
 						min = distSum;
-						curK = k;
+						minK = k;
 					}
 				}
 
 				errorSum.setValue(i, j, min + shortCutError);
-				fromK.setValue(i, j, curK);
+				fromK.setValue(i, j, minK);
+				errorTotal.setValue(i, j, shortCutError + errorTotal.getValue(i, minK) + errorTotal.getValue(minK, j));
 			}
 		}
 
-		// Backtrack the minimal ordered MaxActiveSum path
-		SC[] scs = momas(new SC(0, l.length() - 1));
+		// Backtrack the minimal ordered SumTotalSum path
+		SC[] scs = mosts(new SC(0, l.length() - 1));
 		
 		for(int i = 0; i < scs.length; i++) {
 			simplification[i] = (int) fromK.getValue(scs[i].i, scs[i].j);
@@ -74,25 +78,62 @@ public class MinMaxActiveSumSimplifier implements LineSimplifier {
 		return new Tuple<>(simplification, error);
 	}
 	
-	private SC[] momas(SC sc) {
+	private SC[] mosts(SC sc) {
 		SC[] scs = new SC[sc.j - sc.i - 1];
-		if(sc.j - sc.i == 1) return scs;
+		if(scs.length == 0) return scs;
 		scs[scs.length - 1] = sc;
 
 		// get k
 		int k = (int) fromK.getValue(sc.i, sc.j);
 
-		SC[] sc1 = momas(new SC(sc.i, k));
-		SC[] sc2 = momas(new SC(k, sc.j));
+		SC[] sc1 = mosts(new SC(sc.i, k));
+		SC[] sc2 = mosts(new SC(k, sc.j));
+
+		double[] seseq1 = new double[sc1.length];
+		double[] seseq2 = new double[sc2.length];
 		
-		int active1 = sc1.length - 1;
-		int active2 = sc2.length - 1;
-		
-		for(int i = scs.length - 2; i >= 0; i--) {
-			if(active1 < 0 || (active2 >= 0 && error(sc2[active2]) > error(sc1[active1]))) {
-				scs[i] = sc2[active2--];
+		double sum = 0;
+		for(int i = 0; i < seseq1.length; i++) {
+			sum += error(sc1[i]);
+			seseq1[i] = sum;
+		}
+		sum = 0;
+		for(int i = 0; i < seseq2.length; i++) {
+			sum += error(sc2[i]);
+			seseq2[i] = sum;
+		}
+
+		double[][] dp = new double[seseq1.length + 1][seseq2.length + 1];
+
+		sum = 0;
+		for (int i = 1; i <= seseq1.length; i++) {
+			sum += seseq1[i - 1];
+			dp[i][0] = sum;
+		}
+		sum = 0;
+		for (int j = 1; j <= seseq2.length; j++) {
+			sum += seseq2[j - 1];
+			dp[0][j] = sum;
+		}
+
+		for (int i = 1; i <= seseq1.length; i++) {
+			for (int j = 1; j <= seseq2.length; j++) {
+				dp[i][j] = seseq1[i - 1] + seseq2[j - 1] + Math.min(dp[i - 1][j], dp[i][j - 1]);
+			}
+		}
+
+		int i = seseq1.length, j = seseq2.length;
+
+		for (int x = scs.length - 2; x >= 0; x--) {
+			double ci = (i > 0) ? dp[i - 1][j] : Double.POSITIVE_INFINITY;
+			double cj = (j > 0) ? dp[i][j - 1] : Double.POSITIVE_INFINITY;
+
+			if (ci < cj) {
+				i--;
+				scs[x] = sc1[i];
 			} else {
-				scs[i] = sc1[active1--];
+				j--;
+				scs[x] = sc2[j];
 			}
 		}
 		
@@ -133,7 +174,6 @@ public class MinMaxActiveSumSimplifier implements LineSimplifier {
 	
 	@Override
 	public String toString() {
-		return "MinMaxActiveSum";
+		return "MinSumSumTotalHeuristic";
 	}
-
 }

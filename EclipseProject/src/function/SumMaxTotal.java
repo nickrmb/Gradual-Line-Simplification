@@ -1,6 +1,6 @@
 package function;
 
-public class MaxTotalSum implements OptimizationFunction{
+public class SumMaxTotal implements OptimizationFunction{
 
 	@Override
 	public double[] measure(int[] simplification, double[] error) {
@@ -19,7 +19,7 @@ public class MaxTotalSum implements OptimizationFunction{
 	
 	@Override
 	public String toString() {
-		return "MaxTotalSum";
+		return "SumMaxTotal";
 	}
 
 }

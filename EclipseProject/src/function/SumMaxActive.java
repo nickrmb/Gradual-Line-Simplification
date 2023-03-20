@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 import util.Node;
 import util.Util;
 
-public class MaxActiveSum implements OptimizationFunction {
+public class SumMaxActive implements OptimizationFunction {
 	
 	private double[] errors;
 	
@@ -52,7 +52,7 @@ public class MaxActiveSum implements OptimizationFunction {
 	
 	@Override
 	public String toString() {
-		return "MaxActiveSum";
+		return "SumMaxActive";
 	}
 	
 	

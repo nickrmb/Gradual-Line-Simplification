@@ -33,22 +33,10 @@ public class Simplify {
 		if (solution.r == null) {
 			solution.r = Util.errorFromSimplification(solution.l, line, distance);
 		}
-		
 
 		double time = timeBetweenMS;
 		int[] simplification = solution.l;
-
-		String lineName = new File(args[0]).getName();
-
-		System.out.println("Simplified " + lineName + " with " + simplifier + " in " + time + " ms:");
 		
-		for(OptimizationFunction func : Util.optFunctions) {
-
-			double[] sequence = func.measure(simplification, solution.r);
-			System.out.println("\t" + distance.toString() + "-Distance under " + func + ": " + sequence[sequence.length - 1]);
-			
-		}
-
 		boolean printsRemoval = false;
 
 		for (String s : args) {
@@ -67,6 +55,17 @@ public class Simplify {
 				}
 			}
 			System.out.println();
+		}
+
+		String lineName = new File(args[0]).getName();
+
+		System.out.println("Simplified " + lineName + " with " + simplifier + " in " + time + " ms:");
+		
+		for(OptimizationFunction func : Util.optFunctions) {
+
+			double[] sequence = func.measure(simplification, solution.r);
+			System.out.println("\t" + distance.toString() + "-Distance under " + func + ": " + sequence[sequence.length - 1]);
+			
 		}
 
 	}
