@@ -12,6 +12,7 @@ import function.SumMaxTotal;
 import function.OptimizationFunction;
 import function.Sum;
 import line.PolyLine;
+import simplifier.BruteForceSimplifier;
 import simplifier.EqualSimplifier;
 import simplifier.MinSumSimplifier;
 import simplifier.MinSumSumActiveSimplifier;
@@ -39,7 +40,8 @@ public class Util {
 			new MinSumSumTotalSimplifier(), new MinSumSumTotalHeuristicSimplifier(),
 			new MinSumSumTotalGreedyDPSimplifier(), new MinSumSumActiveSimplifier(), new MinSumMaxActiveSimplifier(),
 			new MinSumMaxTotalSimplifier(), new GreedyBUSimplifier(), new GreedyDifferenceSimplifier(),
-			new GreedyTDSimplifier(), new InOrderSimplifier(), new EqualSimplifier(), new RandomSimplifier() };
+			new GreedyTDSimplifier(), new InOrderSimplifier(), new EqualSimplifier(), new RandomSimplifier(),
+			new BruteForceSimplifier() };
 	public static final OptimizationFunction[] optFunctions = { new Max(), new Sum(), new SumMaxActive(),
 			new SumMaxTotal(), new SumSumActive(), new SumSumTotal(), };
 

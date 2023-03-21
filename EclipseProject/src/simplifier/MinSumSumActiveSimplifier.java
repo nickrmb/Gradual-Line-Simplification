@@ -72,10 +72,6 @@ public class MinSumSumActiveSimplifier implements LineSimplifier {
 
 				double[] active = opt.r.r;
 
-				for (int x = active.length - 1; x > 0; x--) {
-					active[x] = active[x] - active[x - 1];
-				}
-
 				scseq.setValue(i, j, opt.l);
 				saeseq.setValue(i, j, active);
 				fromK.setValue(i, j, minK);
@@ -98,7 +94,7 @@ public class MinSumSumActiveSimplifier implements LineSimplifier {
 			int a, int b, double shortCutError, PolyLine l, DistanceMeasure distance) {
 
 		SC[] scs = new SC[scseq1.length + scseq2.length + 1];
-		double[] se = new double[scs.length];
+		double[] ae = new double[scs.length];
 
 		double[][] dp = new double[saeseq1.length + 1][saeseq2.length + 1];
 
@@ -122,7 +118,9 @@ public class MinSumSumActiveSimplifier implements LineSimplifier {
 		int i = saeseq1.length, j = saeseq2.length;
 
 		for (int x = scs.length - 2; x >= 0; x--) {
-			se[x] = ((i > 0) ? saeseq1[i - 1] : 0) + ((j > 0) ? saeseq2[j - 1] : 0);
+			ae[x] = ((i > 0) ? saeseq1[i - 1] : 0) + ((j > 0) ? saeseq2[j - 1] : 0);
+//			System.out.print(((i > 0) ? saeseq1[i - 1] : 0) + " " + ((j > 0) ? saeseq2[j - 1] : 0) + " ");
+//			System.out.println(se[x]);
 
 			double ci = (i > 0) ? dp[i - 1][j] : Double.POSITIVE_INFINITY;
 			double cj = (j > 0) ? dp[i][j - 1] : Double.POSITIVE_INFINITY;
@@ -137,7 +135,7 @@ public class MinSumSumActiveSimplifier implements LineSimplifier {
 		}
 
 		scs[scs.length - 1] = new SC(a, b);
-		se[se.length - 1] = shortCutError;
+		ae[ae.length - 1] = shortCutError;
 
 //		System.out.println();
 //		System.out.println(a + " " + (scseq1.length == 0 ? a + 1 : scseq1[scseq1.length - 1].j) + " " + b);
@@ -158,12 +156,12 @@ public class MinSumSumActiveSimplifier implements LineSimplifier {
 //			System.out.print("\n");
 //		}
 
-		return new Tuple<>(scs, new Tuple<>(dp[saeseq1.length][saeseq2.length], se));
+		return new Tuple<>(scs, new Tuple<>(dp[saeseq1.length][saeseq2.length], ae));
 	}
 
-//	private double round(double d) {
-//		return Math.round(d * 100) / 100.0;
-//	}
+	private double round(double d) {
+		return Math.round(d * 100) / 100.0;
+	}
 
 	/**
 	 * This method gets the shortcut error between two vertices, if shortcut is
