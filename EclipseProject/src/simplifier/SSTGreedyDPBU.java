@@ -7,7 +7,7 @@ import util.SC;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class MinSumSumTotalGreedyDPSimplifier implements LineSimplifier {
+public class SSTGreedyDPBU implements LineSimplifier {
 
 	private SymmetricMatrix errorShortcut;
 	private int numPointsBetween;
@@ -26,7 +26,7 @@ public class MinSumSumTotalGreedyDPSimplifier implements LineSimplifier {
 		// iterate through all hop distances
 		for (int hop = 1; hop < l.length(); hop++) {
 
-			System.out.println(hop);
+//			System.out.println(hop);
 
 			// iterate through all possible pair of vertices
 			for (int i = 0; i < l.length() - hop; i++) {
@@ -48,18 +48,18 @@ public class MinSumSumTotalGreedyDPSimplifier implements LineSimplifier {
 
 				// get minimal k
 				double min = Double.MAX_VALUE;
-				Tuple<SC[], Double[]> opt = null;
+				SC[] opt = null;
 				int minK = -1;
 				for (int k = i + 1; k < j; k++) {
 					SC[] scseq1 = (SC[]) scseq.getValue(i, k);
 					SC[] scseq2 = (SC[]) scseq.getValue(k, j);
-					Tuple<SC[], Double[]> mosts = mostsGreedy(scseq1, scseq2, i, j, shortCutError, l, distance);
+					Tuple<SC[], Double> mosts = mostsGreedy(scseq1, scseq2, i, j, shortCutError, l, distance);
 
-					double distSum = mosts.r[mosts.r.length - 1];
+					double distSum = mosts.r;
 					if (distSum < min) {
 						min = distSum;
 						minK = k;
-						opt = mosts;
+						opt = mosts.l;
 					}
 				}
 
@@ -67,7 +67,7 @@ public class MinSumSumTotalGreedyDPSimplifier implements LineSimplifier {
 //					System.out.println("\t" + opt.l[x].i + " " + opt.l[x].j);
 //				}
 
-				scseq.setValue(i, j, opt.l);
+				scseq.setValue(i, j, opt);
 				fromK.setValue(i, j, minK);
 
 			}
@@ -85,10 +85,9 @@ public class MinSumSumTotalGreedyDPSimplifier implements LineSimplifier {
 		return new Tuple<>(simplification, error);
 	}
 
-	private Tuple<SC[], Double[]> mostsGreedy(SC[] scseq1, SC[] scseq2, int a, int b, double shortCutError, PolyLine l, DistanceMeasure distance) {
+	private Tuple<SC[], Double> mostsGreedy(SC[] scseq1, SC[] scseq2, int a, int b, double shortCutError, PolyLine l, DistanceMeasure distance) {
 
 		SC[] scs = new SC[scseq1.length + scseq2.length + 1];
-		Double[] se = new Double[scs.length];
 
 		double[] seseq1 = new double[scseq1.length];
 		double[] seseq2 = new double[scseq2.length];
@@ -103,48 +102,39 @@ public class MinSumSumTotalGreedyDPSimplifier implements LineSimplifier {
 			sum += getError(scseq2[i].i, scseq2[i].j, l, distance);
 			seseq2[i] = sum;
 		}
-
-		int i = seseq1.length - 1, j = seseq2.length - 1;
-
-		for (int x = scs.length - 2; x >= 0; x--) {
-			if (i == -1) {
-				scs[x] = scseq2[j];
-				j--;
-				continue;
-			}
-			if (j == -1) {
-				scs[x] = scseq1[i];
-				i--;
-				continue;
-			}
-
-			double ci = seseq1[i];
-			double cbi = (i == 0) ? 0 : seseq1[i - 1];
-			double cj = seseq2[j];
-			double cbj = (j == 0) ? 0 : seseq2[j - 1];
-
-			double c1 = cbi + cj;
-			double c2 = cbj + ci;
-
-			if (c1 < c2) {
-				scs[x] = scseq1[i];
-				i--;
-			} else {
-				scs[x] = scseq2[j];
-				j--;
-			}
-		}
-
+		
+		int i = -1, j = -1;
+		double cur = 0;
 		sum = 0;
+		
 		for (int x = 0; x < scs.length - 1; x++) {
-			sum += getError(scs[x].i, scs[x].j, null, null);
-			se[x] = sum;
+
+			if (i == seseq1.length - 1) {
+				j++;
+				scs[x] = scseq2[j];
+			} else if (j == seseq2.length - 1) {
+				i++;
+				scs[x] = scseq1[i];
+			} else {
+				double ci = seseq1[i + 1] + ((j == -1) ? 0 : seseq2[j]);
+				double cj = seseq2[j + 1] + ((i == -1) ? 0 : seseq1[i]);
+
+				if (ci < cj) {
+					i++;
+					scs[x] = scseq1[i];
+				} else {
+					j++;
+					scs[x] = scseq2[j];
+				}
+			}
+			
+			cur += ((i == -1) ? 0 : seseq1[i]) + ((j == -1) ? 0 : seseq2[j]);
+			sum += cur;
 		}
 
 		scs[scs.length - 1] = new SC(a, b);
-		se[se.length - 1] = shortCutError + se[se.length - 2];
 
-		return new Tuple<>(scs, se);
+		return new Tuple<>(scs, sum);
 	}
 
 	/**
@@ -177,7 +167,7 @@ public class MinSumSumTotalGreedyDPSimplifier implements LineSimplifier {
 
 	@Override
 	public String toString() {
-		return "MinSumSumTotalGreedyDP";
+		return "SSTGreedyDPBU";
 	}
 
 }

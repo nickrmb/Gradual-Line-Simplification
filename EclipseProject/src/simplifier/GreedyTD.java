@@ -5,7 +5,7 @@ import line.PolyLine;
 import util.Node;
 import util.Tuple;
 
-public class GreedyTDSimplifier implements LineSimplifier {
+public class GreedyTD implements LineSimplifier {
 
 	@Override
 	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {

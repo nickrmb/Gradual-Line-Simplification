@@ -8,11 +8,11 @@ import line.PolyLine;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class MinSumSimplifier implements LineSimplifier {
+public class MinMax implements LineSimplifier{
 
 	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorShortcut;
-	private SymmetricMatrix errorSum;
+	private SymmetricMatrix errorMax;
 	private int numPointsBetween;
 
 	@Override
@@ -20,7 +20,7 @@ public class MinSumSimplifier implements LineSimplifier {
 		numPointsBetween = l.length() - 2;
 
 		this.errorShortcut = new SymmetricMatrix(l.length(), -1.0);
-		this.errorSum = new SymmetricMatrix(l.length(), 0);
+		this.errorMax = new SymmetricMatrix(l.length(), 0);
 		this.fromK = new SymmetricMatrix(l.length(), -1);
 
 		int[] simplification = new int[numPointsBetween];
@@ -38,7 +38,7 @@ public class MinSumSimplifier implements LineSimplifier {
 
 				if (hop == 2) {
 					fromK.setValue(i, j, i + 1);
-					errorSum.setValue(i, j, shortCutError);
+					errorMax.setValue(i, j, shortCutError);
 					continue;
 				}
 
@@ -46,14 +46,14 @@ public class MinSumSimplifier implements LineSimplifier {
 				double min = Double.MAX_VALUE;
 				int curK = -1;
 				for (int k = i + 1; k < j; k++) {
-					double distSum = errorSum.getValue(i, k) + errorSum.getValue(k, j);
-					if (distSum < min) {
-						min = distSum;
+					double dist = Math.max(errorMax.getValue(i, k), errorMax.getValue(k, j));
+					if (dist < min) {
+						min = dist;
 						curK = k;
 					}
 				}
 
-				errorSum.setValue(i, j, min + shortCutError);
+				errorMax.setValue(i, j, Math.max(min, shortCutError));
 				fromK.setValue(i, j, curK);
 			}
 		}
@@ -103,10 +103,10 @@ public class MinSumSimplifier implements LineSimplifier {
 	 * @param i The vertex where the shortcut starts
 	 * @param j The vertex where the shortcut ends
 	 * @param l The PolyLine 
-	 * @param distance The distance measure used
+	 * @param distanceMeasure The distance measure used
 	 * @return
 	 */
-	public double getError(int i, int j, PolyLine l, DistanceMeasure distance) {
+	public double getError(int i, int j, PolyLine l, DistanceMeasure distanceMeasure) {
 		// check valid
 		int diff = i - j;
 		if (diff >= -1 && diff <= 1) {
@@ -117,8 +117,8 @@ public class MinSumSimplifier implements LineSimplifier {
 		if (errorShortcut.getValue(i, j) == -1.0) {
 			
 			// calculate
-			double error = distance.measure(l, i, j);
-			errorShortcut.setValue(i, j, error);
+			double distance = distanceMeasure.measure(l, i, j);
+			errorShortcut.setValue(i, j, distance);
 		}
 
 		return errorShortcut.getValue(i, j);
@@ -126,7 +126,7 @@ public class MinSumSimplifier implements LineSimplifier {
 
 	@Override
 	public String toString() {
-		return "MinSum";
+		return "MinMax";
 	}
-
+	
 }

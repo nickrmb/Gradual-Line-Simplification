@@ -6,7 +6,7 @@ import util.SC;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class MinSumSumTotalHeuristicSimplifier implements LineSimplifier {
+public class SSTHeuristic implements LineSimplifier {
 
 	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorShortcut;
@@ -174,6 +174,6 @@ public class MinSumSumTotalHeuristicSimplifier implements LineSimplifier {
 	
 	@Override
 	public String toString() {
-		return "MinSumSumTotalHeuristic";
+		return "SSTHeuristic";
 	}
 }

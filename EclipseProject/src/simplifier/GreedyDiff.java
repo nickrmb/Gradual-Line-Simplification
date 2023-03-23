@@ -4,7 +4,7 @@ import distance.DistanceMeasure;
 import line.PolyLine;
 import util.Tuple;
 
-public class GreedyDifferenceSimplifier implements LineSimplifier {
+public class GreedyDiff implements LineSimplifier {
 
 	@Override
 	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {

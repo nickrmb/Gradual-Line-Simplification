@@ -5,17 +5,14 @@ import java.util.Arrays;
 import distance.DistanceMeasure;
 import function.OptimizationFunction;
 import function.Sum;
-import function.SumMaxActive;
 import function.SumMaxTotal;
-import function.SumSumActive;
-import function.SumSumTotal;
 import line.PolyLine;
 import util.Tuple;
 import util.Util;
 
-public class BruteForceSimplifier implements LineSimplifier {
+public class BruteForce implements LineSimplifier {
 
-	private OptimizationFunction function = new SumSumActive();
+	private OptimizationFunction function = new SumMaxTotal();
 	private PolyLine l;
 	private DistanceMeasure distance;
 
@@ -61,6 +58,10 @@ public class BruteForceSimplifier implements LineSimplifier {
 		int tmp = array[a];
 		array[a] = array[b];
 		array[b] = tmp;
+	}
+	
+	public void setFunction(OptimizationFunction function) {
+		this.function = function;
 	}
 
 }

@@ -7,7 +7,7 @@ import distance.DistanceMeasure;
 import line.PolyLine;
 import util.Tuple;
 
-public class EqualSimplifier implements LineSimplifier {
+public class Equal implements LineSimplifier {
 
 	@Override
 	public Tuple<int[], double[]> simplify(PolyLine line, DistanceMeasure distance) {

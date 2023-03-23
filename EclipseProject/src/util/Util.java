@@ -12,22 +12,27 @@ import function.SumMaxTotal;
 import function.OptimizationFunction;
 import function.Sum;
 import line.PolyLine;
-import simplifier.BruteForceSimplifier;
-import simplifier.EqualSimplifier;
-import simplifier.MinSumSimplifier;
-import simplifier.MinSumSumActiveSimplifier;
-import simplifier.MinSumSumTotalGreedyDPSimplifier;
-import simplifier.MinSumSumTotalHeuristicSimplifier;
-import simplifier.MinSumSumTotalSimplifier;
-import simplifier.GreedyBUSimplifier;
-import simplifier.GreedyDifferenceSimplifier;
-import simplifier.GreedyTDSimplifier;
-import simplifier.InOrderSimplifier;
+import simplifier.BruteForce;
+import simplifier.Equal;
+import simplifier.MinSum;
+import simplifier.SSAGreedyDPBU;
+import simplifier.SSAGreedyDPTD;
+import simplifier.SSAHeuristic;
+import simplifier.SSAGreedy;
+import simplifier.SSTGreedyDPBU;
+import simplifier.SSTGreedyDPTD;
+import simplifier.SSTHeuristic;
+import simplifier.SSTGreedy;
+import simplifier.GreedyBU;
+import simplifier.GreedyDiff;
+import simplifier.GreedyTD;
+import simplifier.InOrder;
 import simplifier.LineSimplifier;
-import simplifier.MinSumMaxActiveSimplifier;
-import simplifier.MinMaxSimplifier;
-import simplifier.MinSumMaxTotalSimplifier;
-import simplifier.RandomSimplifier;
+import simplifier.MinSMA;
+import simplifier.MinMax;
+import simplifier.SMTGreedy;
+import simplifier.SMTGreedy2;
+import simplifier.Rnd;
 
 /**
  * @author nick
@@ -36,14 +41,16 @@ import simplifier.RandomSimplifier;
 public class Util {
 
 	private static final DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
-	private static final LineSimplifier[] simplifiers = { new MinSumSimplifier(), new MinMaxSimplifier(),
-			new MinSumSumTotalSimplifier(), new MinSumSumTotalHeuristicSimplifier(),
-			new MinSumSumTotalGreedyDPSimplifier(), new MinSumSumActiveSimplifier(), new MinSumMaxActiveSimplifier(),
-			new MinSumMaxTotalSimplifier(), new GreedyBUSimplifier(), new GreedyDifferenceSimplifier(),
-			new GreedyTDSimplifier(), new InOrderSimplifier(), new EqualSimplifier(), new RandomSimplifier(),
-			new BruteForceSimplifier() };
+	public static final LineSimplifier[] simplifiers = { new MinSum(), new MinMax(),
+			new SSTGreedy(), new SSTHeuristic(),
+			new SSTGreedyDPTD(), new SSTGreedyDPBU(),
+			new SSAGreedy(), new SSAGreedyDPBU(),
+			new SSAGreedyDPTD(), new SSAHeuristic(),
+			new MinSMA(), new SMTGreedy2(), new SMTGreedy(),
+			new GreedyBU(), new GreedyDiff(), new GreedyTD(),
+			new InOrder(), new Equal(), new Rnd(), new BruteForce() };
 	public static final OptimizationFunction[] optFunctions = { new Max(), new Sum(), new SumMaxActive(),
-			new SumMaxTotal(), new SumSumActive(), new SumSumTotal(), };
+			new SumMaxTotal(), new SumSumActive(), new SumSumTotal() };
 
 	/**
 	 * Returns the error in each simplification step from a removal sequence

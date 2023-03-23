@@ -66,4 +66,40 @@ public class SymmetricMatrix {
 		return n * (n + 1) / 2;
 	}
 
+	@Override
+	public String toString() {
+		int a = 4;
+		String str = "    ";
+
+		for (int i = 0; i < n; i++) {
+			str += " | ";
+			a += 4;
+			str += uniform(String.valueOf(i), 3) + "                 ";
+			a += 20;
+		}
+		str += "\n";
+		for (int i = 0; i < a; i++) {
+			str += "-";
+		}
+		str += "\n";
+		for (int i = 0; i < n; i++) {
+			str += uniform(i + "", 3) + " | ";
+			for (int j = 0; j < n; j++) {
+				str += uniform(String.valueOf(getValue(j, i)), 20);
+				if (j != n - 1) {
+					str += " | ";
+				}
+			}
+			str += "\n";
+		}
+		return str;
+	}
+
+	private String uniform(String str, int len) {
+		for (int i = str.length(); i <= len; i++) {
+			str += " ";
+		}
+		return str;
+	}
+
 }

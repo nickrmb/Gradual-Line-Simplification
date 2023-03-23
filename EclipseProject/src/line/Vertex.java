@@ -57,7 +57,7 @@ public class Vertex {
 
 	@Override
 	public String toString() {
-		return "(" + (100 * Math.round(x)) / 100 + "," + (100 * Math.round(y)) / 100 + ")";
+		return "(" + x + "," + y + ")";
 	}
 
 }

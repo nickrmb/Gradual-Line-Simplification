@@ -6,7 +6,7 @@ import util.SymmetricMatrix;
 import util.Tuple;
 import util.SC;
 
-public class MinSumMaxActiveSimplifier implements LineSimplifier {
+public class MinSMA implements LineSimplifier {
 
 	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorShortcut;
@@ -133,7 +133,7 @@ public class MinSumMaxActiveSimplifier implements LineSimplifier {
 	
 	@Override
 	public String toString() {
-		return "MinSumMaxActive";
+		return "MinSMA";
 	}
 
 }

@@ -6,7 +6,7 @@ import util.SC;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class MinSumMaxTotalSimplifier implements LineSimplifier {
+public class SMTGreedy implements LineSimplifier {
 
 	private SymmetricMatrix errorShortcut;
 	private SymmetricMatrix fromK;
@@ -50,8 +50,13 @@ public class MinSumMaxTotalSimplifier implements LineSimplifier {
 				double minMax = 0;
 				int curK = -1;
 				for (int k = i + 1; k < j; k++) {
-					double max = Math.max(shortCutError, Math.max(errorMax.getValue(i, k), errorMax.getValue(k, j)));
-					double dist = max + errorSum.getValue(i, k) + errorSum.getValue(k, j);
+					double max1 = (k - i > 1) ? errorMax.getValue(i, k) : 0.0;
+					double max2 = (j - k > 1) ? errorMax.getValue(k, j) : 0.0;
+					double max = Math.max(max1, max2);
+					max = Math.max(max, shortCutError);
+					double dist = max + ((k - i > 1) ? errorSum.getValue(i, k) : 0.0)
+							+ ((j - k > 1) ? errorSum.getValue(k, j) : 0.0);
+					
 					if (dist < minCost) {
 						minCost = dist;
 						curK = k;
@@ -67,14 +72,23 @@ public class MinSumMaxTotalSimplifier implements LineSimplifier {
 
 		// Backtrack the minimal ordered MaxTotalSum path
 		SC[] scs = momts(new SC(0, l.length() - 1));
-		
-		for(int i = 0; i < scs.length; i++) {
+
+		for (int i = 0; i < scs.length; i++) {
 			simplification[i] = (int) fromK.getValue(scs[i].i, scs[i].j);
 			error[i] = error(scs[i]);
 		}
-		
+
+//		System.out.println("Shortcut-error:\n" + errorShortcut);
+//		System.out.println("From K:\n" + fromK);
+//		System.out.println("Max-Implicated-Error:\n" + errorMax);
+//		System.out.println("Summed-Total-error:\n" + errorSum);
+
 		return new Tuple<>(simplification, error);
 	}
+
+//	private Tuple<SC[], double[]> momts(SC sc, int k, double[] mtseq1, double[] mtseq2) {
+//		
+//	}
 
 	private SC[] momts(SC sc) {
 		SC[] scs = new SC[sc.j - sc.i - 1];
@@ -136,7 +150,7 @@ public class MinSumMaxTotalSimplifier implements LineSimplifier {
 
 	@Override
 	public String toString() {
-		return "MinSumMaxTotal";
+		return "SMTGreedy";
 	}
 
 }

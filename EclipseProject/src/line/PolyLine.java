@@ -142,5 +142,17 @@ public class PolyLine {
 	public int length() {
 		return vertices.length;
 	}
+	
+	@Override
+	public String toString() {
+		String str = "[";
+		for(int i = 0; i < vertices.length; i++) {
+			str += vertices[i].toString();
+			if(i != vertices.length - 1) {
+				str += ", ";
+			}
+		}
+		return str + "]";
+	}
 
 }

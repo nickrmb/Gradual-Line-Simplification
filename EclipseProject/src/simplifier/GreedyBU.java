@@ -6,7 +6,7 @@ import util.MinNodeHeap;
 import util.HeapNode;
 import util.Tuple;
 
-public class GreedyBUSimplifier implements LineSimplifier {
+public class GreedyBU implements LineSimplifier {
 
 	@Override
 	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {
