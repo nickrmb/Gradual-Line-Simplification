@@ -139,40 +139,40 @@ public class SSAGreedy implements LineSimplifier {
 		
 		double total = dp[saeseq1.length][saeseq2.length] + shortCutError;
 
-		System.out.println();
-		System.out.println(a + " " + (scseq1.length == 0 ? a + 1 : scseq1[scseq1.length - 1].j) + " " + b);
-		System.out.print("\t|0");
-		for (int x = 0; x < saeseq1.length; x++) {
-			//System.out.print("\t" + round(saeseq1[x]));
-			System.out.print("\t" + round(saeseq1[x]));
-		}
-		System.out.print(
-				"\n-------------------------------------------------------------------------------------------------\n");
-		for (int x = 0; x <= saeseq2.length; x++) {
-			for (int y = 0; y <= saeseq1.length + 1; y++) {
-				if (y == 0) {
-					//System.out.print(round((x == 0) ? 0 : saeseq2[x - 1]) + "\t|");
-					System.out.print(((x == 0) ? 0 : round(saeseq2[x-1])) + "\t|");
-				} else {
-					System.out.print(round(dp[y - 1][x]) + "\t");
-				}
-			}
-			System.out.print("\n");
-		}
-		for(i = 0; i < ae.length; i++) {
-			System.out.print(round(ae[i]));
-			if(i != ae.length - 1)
-				System.out.print(", ");
-		}
-		System.out.println();
-		System.out.println("total: " + total);
+//		System.out.println();
+//		System.out.println(a + " " + (scseq1.length == 0 ? a + 1 : scseq1[scseq1.length - 1].j) + " " + b);
+//		System.out.print("\t|0");
+//		for (int x = 0; x < saeseq1.length; x++) {
+//			//System.out.print("\t" + round(saeseq1[x]));
+//			System.out.print("\t" + round(saeseq1[x]));
+//		}
+//		System.out.print(
+//				"\n-------------------------------------------------------------------------------------------------\n");
+//		for (int x = 0; x <= saeseq2.length; x++) {
+//			for (int y = 0; y <= saeseq1.length + 1; y++) {
+//				if (y == 0) {
+//					//System.out.print(round((x == 0) ? 0 : saeseq2[x - 1]) + "\t|");
+//					System.out.print(((x == 0) ? 0 : round(saeseq2[x-1])) + "\t|");
+//				} else {
+//					System.out.print(round(dp[y - 1][x]) + "\t");
+//				}
+//			}
+//			System.out.print("\n");
+//		}
+//		for(i = 0; i < ae.length; i++) {
+//			System.out.print(round(ae[i]));
+//			if(i != ae.length - 1)
+//				System.out.print(", ");
+//		}
+//		System.out.println();
+//		System.out.println("total: " + total);
 
 		return new Tuple<>(scs, new Tuple<>(total, ae));
 	}
 
-	private double round(double d) {
-		return Math.round(d * 100) / 100.0;
-	}
+//	private double round(double d) {
+//		return Math.round(d * 100) / 100.0;
+//	}
 
 	/**
 	 * This method gets the shortcut error between two vertices, if shortcut is

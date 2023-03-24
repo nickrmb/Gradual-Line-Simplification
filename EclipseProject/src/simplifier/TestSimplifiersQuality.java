@@ -10,6 +10,7 @@ import distance.DistanceMeasure;
 import distance.Hausdorff;
 import function.OptimizationFunction;
 import function.SumMaxTotal;
+import function.SumSumActive;
 import line.PolyLine;
 import line.Vertex;
 import util.Tuple;
@@ -21,7 +22,7 @@ public class TestSimplifiersQuality {
 
 	private static final BruteForce bruteForce = new BruteForce();
 
-	private static final OptimizationFunction[] functions = Util.optFunctions;
+	private static final OptimizationFunction[] functions = { new SumSumActive() };// Util.optFunctions;
 
 	public static void main(String[] args) {
 
@@ -77,7 +78,7 @@ public class TestSimplifiersQuality {
 					double[] ssol = function.measure(solutionsSeq[i][j], solutionsError[i][j]);
 					double val = ssol[ssol.length - 1];
 					overest += val / opt[j];
-					if (simplifiers[i].toString().equalsIgnoreCase("MinSumMaxTotal") && val != opt[j]) {
+					if (simplifiers[i].toString().equalsIgnoreCase("SSAGreedy") && val != opt[j]) {
 						System.out.println(lines[j]);
 					}
 				}
@@ -88,7 +89,9 @@ public class TestSimplifiersQuality {
 			list.sort(Entry.comparingByValue());
 
 			for (Entry<String, Double> entry : list) {
-				System.out.println("\t" + uniform(String.valueOf((entry.getValue() / lines.length - 1.0)* 100) + "%", 20) + "\t" + entry.getKey());
+				System.out
+						.println("\t" + uniform(String.valueOf((entry.getValue() / lines.length - 1.0) * 100) + "%", 20)
+								+ "\t" + entry.getKey());
 			}
 
 			System.out.println("\n-----------------------------------------"
@@ -120,7 +123,7 @@ public class TestSimplifiersQuality {
 
 		return line;
 	}
-	
+
 	private static String uniform(String str, int len) {
 		for (int i = str.length(); i <= len; i++) {
 			str += " ";

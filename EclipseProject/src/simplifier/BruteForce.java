@@ -6,13 +6,14 @@ import distance.DistanceMeasure;
 import function.OptimizationFunction;
 import function.Sum;
 import function.SumMaxTotal;
+import function.SumSumActive;
 import line.PolyLine;
 import util.Tuple;
 import util.Util;
 
 public class BruteForce implements LineSimplifier {
 
-	private OptimizationFunction function = new SumMaxTotal();
+	private OptimizationFunction function = new SumSumActive();
 	private PolyLine l;
 	private DistanceMeasure distance;
 
