@@ -141,6 +141,9 @@ public class SSTGreedyDPTD implements LineSimplifier {
 			cur += getError(scs[x].i, scs[x].j, null, null);
 			sum += cur;
 		}
+		
+		cur += shortCutError;
+		sum += cur;
 
 
 		return new Tuple<>(scs, sum);

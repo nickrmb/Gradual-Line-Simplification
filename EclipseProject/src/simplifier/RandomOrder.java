@@ -6,7 +6,7 @@ import distance.DistanceMeasure;
 import line.PolyLine;
 import util.Tuple;
 
-public class Rnd implements LineSimplifier {
+public class RandomOrder implements LineSimplifier {
 
 	@Override
 	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {
@@ -35,7 +35,7 @@ public class Rnd implements LineSimplifier {
 	
 	@Override
 	public String toString() {
-		return "Random";
+		return "RandomOrder";
 	}
 
 }

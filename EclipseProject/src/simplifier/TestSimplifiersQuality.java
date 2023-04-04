@@ -22,7 +22,7 @@ public class TestSimplifiersQuality {
 
 	private static final BruteForce bruteForce = new BruteForce();
 
-	private static final OptimizationFunction[] functions = { new SumSumActive() };// Util.optFunctions;
+	private static final OptimizationFunction[] functions = Util.optFunctions; // { new SumSumActive() };//
 
 	public static void main(String[] args) {
 
@@ -78,9 +78,9 @@ public class TestSimplifiersQuality {
 					double[] ssol = function.measure(solutionsSeq[i][j], solutionsError[i][j]);
 					double val = ssol[ssol.length - 1];
 					overest += val / opt[j];
-					if (simplifiers[i].toString().equalsIgnoreCase("SSAGreedy") && val != opt[j]) {
-						System.out.println(lines[j]);
-					}
+//					if (simplifiers[i].toString().equalsIgnoreCase("SSAGreedy") && val != opt[j]) {
+//						System.out.println(lines[j]);
+//					}
 				}
 				map.put(simplifiers[i].toString(), overest);// numLines);
 			}

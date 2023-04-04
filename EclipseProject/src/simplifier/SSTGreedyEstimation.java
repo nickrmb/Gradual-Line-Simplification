@@ -6,7 +6,7 @@ import util.SC;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class SSTHeuristic implements LineSimplifier {
+public class SSTGreedyEstimation implements LineSimplifier {
 
 	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorShortcut;
@@ -19,7 +19,7 @@ public class SSTHeuristic implements LineSimplifier {
 	@Override
 	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {
 		numPointsBetween = l.length() - 2;
-		
+
 		this.l = l;
 		this.distance = distance;
 
@@ -30,8 +30,9 @@ public class SSTHeuristic implements LineSimplifier {
 
 		int[] simplification = new int[numPointsBetween];
 		double[] error = new double[numPointsBetween];
-		
-		if(simplification.length == 0) return new Tuple<>(simplification, error);
+
+		if (simplification.length == 0)
+			return new Tuple<>(simplification, error);
 
 		// iterate through all hop distances
 		for (int hop = 2; hop < l.length(); hop++) {
@@ -54,14 +55,17 @@ public class SSTHeuristic implements LineSimplifier {
 				double min = Double.MAX_VALUE;
 				int minK = -1;
 				for (int k = i + 1; k < j; k++) {
-					double distSum = errorTotal.getValue(i, k) + errorTotal.getValue(k, j) + errorSum.getValue(i, k) + errorSum.getValue(k, j);
+					double cik = errorSum.getValue(i, k);
+					double ckj = errorSum.getValue(k, j);
+					double distSum = shortCutError + errorTotal.getValue(i, k) + errorTotal.getValue(k, j)
+							+ meanEstimationFunction(cik, ckj, i, k, j);
 					if (distSum < min) {
 						min = distSum;
 						minK = k;
 					}
 				}
 
-				errorSum.setValue(i, j, min + shortCutError);
+				errorSum.setValue(i, j, min);
 				fromK.setValue(i, j, minK);
 				errorTotal.setValue(i, j, shortCutError + errorTotal.getValue(i, minK) + errorTotal.getValue(minK, j));
 			}
@@ -69,18 +73,19 @@ public class SSTHeuristic implements LineSimplifier {
 
 		// Backtrack the minimal ordered SumTotalSum path
 		SC[] scs = mosts(new SC(0, l.length() - 1));
-		
-		for(int i = 0; i < scs.length; i++) {
+
+		for (int i = 0; i < scs.length; i++) {
 			simplification[i] = (int) fromK.getValue(scs[i].i, scs[i].j);
 			error[i] = error(scs[i]);
 		}
 
 		return new Tuple<>(simplification, error);
 	}
-	
+
 	private SC[] mosts(SC sc) {
 		SC[] scs = new SC[sc.j - sc.i - 1];
-		if(scs.length == 0) return scs;
+		if (scs.length == 0)
+			return scs;
 		scs[scs.length - 1] = sc;
 
 		// get k
@@ -91,14 +96,14 @@ public class SSTHeuristic implements LineSimplifier {
 
 		double[] seseq1 = new double[sc1.length];
 		double[] seseq2 = new double[sc2.length];
-		
+
 		double sum = 0;
-		for(int i = 0; i < seseq1.length; i++) {
+		for (int i = 0; i < seseq1.length; i++) {
 			sum += error(sc1[i]);
 			seseq1[i] = sum;
 		}
 		sum = 0;
-		for(int i = 0; i < seseq2.length; i++) {
+		for (int i = 0; i < seseq2.length; i++) {
 			sum += error(sc2[i]);
 			seseq2[i] = sum;
 		}
@@ -136,17 +141,21 @@ public class SSTHeuristic implements LineSimplifier {
 				scs[x] = sc2[j];
 			}
 		}
-		
+
 		return scs;
+	}
+
+	private double meanEstimationFunction(double cik, double ckj, double i, double k, double j) {
+		return cik * (1 + (j - k - 1) / (k - i)) + ckj * (1 + (k - i - 1) / (j - k));
 	}
 
 	/**
 	 * This method gets the shortcut error between two vertices, if shortcut is
 	 * already calculated it is accessed in constant time
 	 * 
-	 * @param i The vertex where the shortcut starts
-	 * @param j The vertex where the shortcut ends
-	 * @param l The PolyLine 
+	 * @param i        The vertex where the shortcut starts
+	 * @param j        The vertex where the shortcut ends
+	 * @param l        The PolyLine
 	 * @param distance The distance measure used
 	 * @return
 	 */
@@ -159,7 +168,7 @@ public class SSTHeuristic implements LineSimplifier {
 
 		// check if calculated
 		if (errorShortcut.getValue(i, j) == -1.0) {
-			
+
 			// calculate
 			double error = distance.measure(l, i, j);
 			errorShortcut.setValue(i, j, error);
@@ -167,13 +176,13 @@ public class SSTHeuristic implements LineSimplifier {
 
 		return errorShortcut.getValue(i, j);
 	}
-	
+
 	private double error(SC sc) {
 		return error(sc.i, sc.j);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "SSTHeuristic";
+		return "SSTGreedyEstimation";
 	}
 }

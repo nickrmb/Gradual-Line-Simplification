@@ -98,7 +98,7 @@ public class SSAGreedyDPTD implements LineSimplifier {
 
 		int i = saeseq1.length - 1, j = saeseq2.length - 1;
 
-		double sum = shortCutError;
+		double sum = 0;
 		for (int x = scs.length - 2; x >= 0; x--) {
 			ae[x] = (i >= 0 ? saeseq1[i] : 0) + (j >= 0 ? saeseq2[j] : 0);
 			sum += ae[x];
@@ -132,6 +132,7 @@ public class SSAGreedyDPTD implements LineSimplifier {
 
 		}
 
+		sum += shortCutError;
 		scs[scs.length - 1] = new SC(a, b);
 		ae[ae.length - 1] = shortCutError;
 

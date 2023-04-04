@@ -6,11 +6,10 @@ import util.SC;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class SSAHeuristic implements LineSimplifier {
+public class SSAGreedyEstimation implements LineSimplifier {
 
 	private SymmetricMatrix fromK;
 	private SymmetricMatrix errorShortcut;
-	private SymmetricMatrix errorTotal;
 	private SymmetricMatrix errorSum;
 	private int numPointsBetween;
 	private PolyLine l;
@@ -26,7 +25,6 @@ public class SSAHeuristic implements LineSimplifier {
 		this.errorShortcut = new SymmetricMatrix(l.length(), -1.0);
 		this.errorSum = new SymmetricMatrix(l.length(), 0);
 		this.fromK = new SymmetricMatrix(l.length(), -1);
-		this.errorTotal = new SymmetricMatrix(l.length(), 0);
 
 		int[] simplification = new int[numPointsBetween];
 		double[] error = new double[numPointsBetween];
@@ -47,7 +45,6 @@ public class SSAHeuristic implements LineSimplifier {
 				if (hop == 2) {
 					fromK.setValue(i, j, i + 1);
 					errorSum.setValue(i, j, shortCutError);
-					errorTotal.setValue(i, j, shortCutError);
 					continue;
 				}
 
@@ -55,8 +52,9 @@ public class SSAHeuristic implements LineSimplifier {
 				double min = Double.MAX_VALUE;
 				int minK = -1;
 				for (int k = i + 1; k < j; k++) {
-					double distSum = errorTotal.getValue(i, k) + errorTotal.getValue(k, j) + errorSum.getValue(i, k)
-							+ errorSum.getValue(k, j);
+					double cik = errorSum.getValue(i, k);
+					double ckj = errorSum.getValue(k, j);
+					double distSum = meanEstimationFunction(cik, ckj, i, k, j);
 					if (distSum < min) {
 						min = distSum;
 						minK = k;
@@ -65,7 +63,6 @@ public class SSAHeuristic implements LineSimplifier {
 
 				errorSum.setValue(i, j, min + shortCutError);
 				fromK.setValue(i, j, minK);
-				errorTotal.setValue(i, j, shortCutError + errorTotal.getValue(i, minK) + errorTotal.getValue(minK, j));
 			}
 		}
 
@@ -143,6 +140,10 @@ public class SSAHeuristic implements LineSimplifier {
 		return new Tuple<>(scs, sae);
 	}
 
+	private double meanEstimationFunction(double cik, double ckj, double i, double k, double j) {
+		return cik * (1 + (j - k - 1) / (k - i)) + ckj * (1 + (k - i - 1) / (j - k));
+	}
+
 	/**
 	 * This method gets the shortcut error between two vertices, if shortcut is
 	 * already calculated it is accessed in constant time
@@ -177,6 +178,6 @@ public class SSAHeuristic implements LineSimplifier {
 
 	@Override
 	public String toString() {
-		return "SSAHeuristic";
+		return "SSAGreedyEstimation";
 	}
 }

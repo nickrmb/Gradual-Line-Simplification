@@ -98,7 +98,7 @@ public class SSAGreedyDPBU implements LineSimplifier {
 
 		int i = -1, j = -1;
 
-		double sum = shortCutError;
+		double sum = 0;
 		for (int x = 0; x < scs.length - 1; x++) {
 
 			if (i == saeseq1.length - 1) {
@@ -123,7 +123,8 @@ public class SSAGreedyDPBU implements LineSimplifier {
 			ae[x] = ((i == -1) ? 0 : saeseq1[i]) + ((j == -1) ? 0 : saeseq2[j]);
 			sum += ae[x];
 		}
-
+		
+		sum += shortCutError;
 		scs[scs.length - 1] = new SC(a, b);
 		ae[ae.length - 1] = shortCutError;
 

@@ -17,11 +17,13 @@ import simplifier.Equal;
 import simplifier.MinSum;
 import simplifier.SSAGreedyDPBU;
 import simplifier.SSAGreedyDPTD;
-import simplifier.SSAHeuristic;
+import simplifier.SSAGreedyEstimation;
+import simplifier.SSAGreedyPicking;
 import simplifier.SSAGreedy;
 import simplifier.SSTGreedyDPBU;
 import simplifier.SSTGreedyDPTD;
-import simplifier.SSTHeuristic;
+import simplifier.SSTGreedyEstimation;
+import simplifier.SSTGreedyPicking;
 import simplifier.SSTGreedy;
 import simplifier.GreedyBU;
 import simplifier.GreedyDiff;
@@ -31,8 +33,7 @@ import simplifier.LineSimplifier;
 import simplifier.MinSMA;
 import simplifier.MinMax;
 import simplifier.SMTGreedy;
-import simplifier.SMTGreedy2;
-import simplifier.Rnd;
+import simplifier.RandomOrder;
 
 /**
  * @author nick
@@ -41,14 +42,11 @@ import simplifier.Rnd;
 public class Util {
 
 	private static final DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
-	public static final LineSimplifier[] simplifiers = { new MinSum(), new MinMax(),
-			new SSTGreedy(), new SSTHeuristic(),
-			new SSTGreedyDPTD(), new SSTGreedyDPBU(),
-			new SSAGreedy(), new SSAGreedyDPBU(),
-			new SSAGreedyDPTD(), new SSAHeuristic(),
-			new MinSMA(), new SMTGreedy2(), new SMTGreedy(),
-			new GreedyBU(), new GreedyDiff(), new GreedyTD(),
-			new InOrder(), new Equal(), new Rnd(), new BruteForce() };
+	public static final LineSimplifier[] simplifiers = { new MinSum(), new MinMax(), new SSTGreedy(),
+			new SSTGreedyEstimation(), new SSTGreedyPicking(), new SSTGreedyDPTD(), new SSTGreedyDPBU(),
+			new SSAGreedy(), new SSAGreedyDPBU(), new SSAGreedyDPTD(), new SSAGreedyEstimation(),
+			new SSAGreedyPicking(), new MinSMA(), new SMTGreedy(), new GreedyBU(), new GreedyDiff(),
+			new GreedyTD(), new InOrder(), new Equal(), new RandomOrder(), new BruteForce() };
 	public static final OptimizationFunction[] optFunctions = { new Max(), new Sum(), new SumMaxActive(),
 			new SumMaxTotal(), new SumSumActive(), new SumSumTotal() };
 

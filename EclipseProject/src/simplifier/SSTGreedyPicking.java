@@ -7,7 +7,7 @@ import util.SC;
 import util.SymmetricMatrix;
 import util.Tuple;
 
-public class SSTGreedyDPBU implements LineSimplifier {
+public class SSTGreedyPicking implements LineSimplifier {
 
 	private SymmetricMatrix errorShortcut;
 	private int numPointsBetween;
@@ -19,6 +19,8 @@ public class SSTGreedyDPBU implements LineSimplifier {
 		this.errorShortcut = new SymmetricMatrix(l.length(), -1.0);
 		GenericSymmetricMatrix scseq = new GenericSymmetricMatrix(l.length(), null);
 		SymmetricMatrix fromK = new SymmetricMatrix(l.length(), 0);
+		SymmetricMatrix sst = new SymmetricMatrix(l.length(), 0);
+		SymmetricMatrix total = new SymmetricMatrix(l.length(), 0);
 
 		int[] simplification = new int[numPointsBetween];
 		double[] error = new double[numPointsBetween];
@@ -42,33 +44,34 @@ public class SSTGreedyDPBU implements LineSimplifier {
 
 				if (hop == 2) {
 					scseq.setValue(i, j, new SC[] { new SC(i, j) });
+					sst.setValue(i, j, shortCutError);
+					total.setValue(i, j, shortCutError);
 					fromK.setValue(i, j, i + 1);
 					continue;
 				}
 
 				// get minimal k
 				double min = Double.MAX_VALUE;
-				SC[] opt = null;
 				int minK = -1;
 				for (int k = i + 1; k < j; k++) {
-					SC[] scseq1 = (SC[]) scseq.getValue(i, k);
-					SC[] scseq2 = (SC[]) scseq.getValue(k, j);
-					Tuple<SC[], Double> mosts = mostsGreedy(scseq1, scseq2, i, j, shortCutError, l, distance);
-
-					double distSum = mosts.r;
+					double distSum = shortCutError + total.getValue(i, k) + total.getValue(k, j)
+							+ meanEstimationFunction(sst.getValue(i, k), sst.getValue(k, j), i, k, j);
 					if (distSum < min) {
 						min = distSum;
 						minK = k;
-						opt = mosts.l;
 					}
 				}
 
-//				for (int x = 0; x < opt.l.length; x++) {
-//					System.out.println("\t" + opt.l[x].i + " " + opt.l[x].j);
-//				}
+				SC[] scseq1 = (SC[]) scseq.getValue(i, minK);
+				SC[] scseq2 = (SC[]) scseq.getValue(minK, j);
+				Tuple<SC[], Double> mosts = mosts(scseq1, scseq2, i, j, shortCutError, l, distance);
 
-				scseq.setValue(i, j, opt);
+				scseq.setValue(i, j, mosts.l);
+				sst.setValue(i, j, mosts.r);
+//				sst.setValue(i, j, min);
+				//System.out.println("Estimated: " + (min) + " ; Actual: " + mosts.r);
 				fromK.setValue(i, j, minK);
+				total.setValue(i, j, total.getValue(i, minK) + total.getValue(minK, j) + shortCutError);
 
 			}
 		}
@@ -85,10 +88,11 @@ public class SSTGreedyDPBU implements LineSimplifier {
 		return new Tuple<>(simplification, error);
 	}
 
-	private Tuple<SC[], Double> mostsGreedy(SC[] scseq1, SC[] scseq2, int a, int b, double shortCutError, PolyLine l,
+	private Tuple<SC[], Double> mosts(SC[] scseq1, SC[] scseq2, int a, int b, double shortCutError, PolyLine l,
 			DistanceMeasure distance) {
 
 		SC[] scs = new SC[scseq1.length + scseq2.length + 1];
+		double[] se = new double[scs.length];
 
 		double[] seseq1 = new double[scseq1.length];
 		double[] seseq2 = new double[scseq2.length];
@@ -104,41 +108,77 @@ public class SSTGreedyDPBU implements LineSimplifier {
 			seseq2[i] = sum;
 		}
 
-		int i = -1, j = -1;
-		double cur = 0;
+		double[][] dp = new double[seseq1.length + 1][seseq2.length + 1];
+		dp[0][0] = 0.0;
+
 		sum = 0;
-
-		for (int x = 0; x < scs.length - 1; x++) {
-
-			if (i == seseq1.length - 1) {
-				j++;
-				scs[x] = scseq2[j];
-			} else if (j == seseq2.length - 1) {
-				i++;
-				scs[x] = scseq1[i];
-			} else {
-				double ci = seseq1[i + 1] + ((j == -1) ? 0 : seseq2[j]);
-				double cj = seseq2[j + 1] + ((i == -1) ? 0 : seseq1[i]);
-
-				if (ci < cj) {
-					i++;
-					scs[x] = scseq1[i];
-				} else {
-					j++;
-					scs[x] = scseq2[j];
-				}
-			}
-
-			cur += ((i == -1) ? 0 : seseq1[i]) + ((j == -1) ? 0 : seseq2[j]);
-			sum += cur;
+		for (int i = 1; i <= seseq1.length; i++) {
+			sum += seseq1[i - 1];
+			dp[i][0] = sum;
+		}
+		sum = 0;
+		for (int j = 1; j <= seseq2.length; j++) {
+			sum += seseq2[j - 1];
+			dp[0][j] = sum;
 		}
 
-		scs[scs.length - 1] = new SC(a, b);
-		cur += shortCutError;
-		sum += cur;
+		for (int i = 1; i <= seseq1.length; i++) {
+			for (int j = 1; j <= seseq2.length; j++) {
+				dp[i][j] = seseq1[i - 1] + seseq2[j - 1] + Math.min(dp[i - 1][j], dp[i][j - 1]);
+			}
+		}
 
-		return new Tuple<>(scs, sum);
+		int i = seseq1.length, j = seseq2.length;
+		double total = 0;
+
+		for (int x = scs.length - 2; x >= 0; x--) {
+			total += (i > 0 ? seseq1[i - 1] : 0) + (j > 0 ? seseq2[j - 1] : 0);
+			se[x] = dp[i][j];
+			double ci = (i > 0) ? dp[i - 1][j] : Double.POSITIVE_INFINITY;
+			double cj = (j > 0) ? dp[i][j - 1] : Double.POSITIVE_INFINITY;
+
+			if (ci < cj) {
+				i--;
+				scs[x] = scseq1[i];
+			} else {
+				j--;
+				scs[x] = scseq2[j];
+			}
+		}
+
+		total += shortCutError + (seseq1.length > 0 ? seseq1[seseq1.length - 1] : 0)
+				+ (seseq2.length > 0 ? seseq2[seseq2.length - 1] : 0);
+
+		scs[scs.length - 1] = new SC(a, b);
+		se[se.length - 1] = shortCutError + se[se.length - 2];
+
+//		System.out.print("\t|0");
+//		for (int x = 0; x < seseq1.length; x++) {
+//			System.out.print("\t" + round(seseq1[x]));
+//		}
+//		System.out.print(
+//				"\n-------------------------------------------------------------------------------------------------\n");
+//		for (int x = 0; x <= seseq2.length; x++) {
+//			for (int y = 0; y <= seseq1.length + 1; y++) {
+//				if (y == 0) {
+//					System.out.print(round((x == 0) ? 0 : seseq2[x - 1]) + "\t|");
+//				} else {
+//					System.out.print(round(dp[y - 1][x]) + "\t");
+//				}
+//			}
+//			System.out.print("\n");
+//		}
+
+		return new Tuple<SC[], Double>(scs, total);
 	}
+
+	private double meanEstimationFunction(double cik, double ckj, double i, double k, double j) {
+		return cik * (1 + (j - k - 1) / (k - i)) + ckj * (1 + (k - i - 1) / (j - k));
+	}
+
+//	private double round(double d) {
+//		return Math.round(d * 100) / 100.0;
+//	}
 
 	/**
 	 * This method gets the shortcut error between two vertices, if shortcut is
@@ -170,7 +210,7 @@ public class SSTGreedyDPBU implements LineSimplifier {
 
 	@Override
 	public String toString() {
-		return "SSTGreedyDPBU";
+		return "SSTGreedyPicking";
 	}
 
 }
