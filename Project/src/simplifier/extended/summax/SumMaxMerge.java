@@ -29,4 +29,9 @@ public class SumMaxMerge implements Merge {
 		return new Tuple<>(null,seq);
 	}
 
+	@Override
+	public Tuple<Double, Removal[]> getError(Removal[] seq1, Removal[] seq2, Removal r) {
+		return null;
+	}
+
 }

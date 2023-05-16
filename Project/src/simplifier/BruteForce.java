@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 import distance.DistanceMeasure;
 import function.OptimizationFunction;
-import function.Sum;
-import function.SumMaxTotal;
 import function.SumSumActive;
 import line.PolyLine;
 import util.Tuple;

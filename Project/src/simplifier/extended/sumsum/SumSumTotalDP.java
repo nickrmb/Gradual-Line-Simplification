@@ -24,6 +24,10 @@ public class SumSumTotalDP extends DynamicProgramSimplifier {
 
 	@Override
 	public void onMinFound(int i, int j, int minK) {
+		if(cur[minK] == null) {
+			Removal r = new Removal(minK, new SC(i, j), totalSum.getValue(i, minK) + totalSum.getValue(minK, j) + getShortcutDistance(i, j));
+			cur[minK] = ssm.merge(getRemoval(i, minK), getRemoval(minK, j), r).r;
+		}
 		setRemoval(i, j, cur[minK]);
 		totalSum.setValue(i, j, totalSum.getValue(i, minK) + totalSum.getValue(minK, j) + getShortcutDistance(i, j));
 	}
@@ -31,9 +35,9 @@ public class SumSumTotalDP extends DynamicProgramSimplifier {
 	@Override
 	public double getError(int i, int j, int k, double error_ik, double error_kj, double shortcutDistance) {
 		Removal r = new Removal(k, new SC(i, j), totalSum.getValue(i, k) + totalSum.getValue(k, j) + shortcutDistance);
-		Tuple<Double, Removal[]> merged = ssm.merge(getRemoval(i, k), getRemoval(k, j), r);
-		cur[k] = merged.r;
-		return merged.l;
+		Tuple<Double, Removal[]> error = ssm.getError(getRemoval(i, k), getRemoval(k, j), r);
+		cur[k] = error.r;
+		return error.l;
 	}
 
 	@Override
