@@ -119,6 +119,10 @@ public abstract class DynamicProgramSimplifier implements LineSimplifier {
 		
 		return shortcutSeq;
 	}
+	
+	public void updateError(int i, int j, double err) {
+		error.setValue(i, j, err);
+	}
 
 	@Override
 	public String toString() {

@@ -30,7 +30,7 @@ public class SumMaxMerge implements Merge {
 	}
 
 	@Override
-	public Tuple<Double, Removal[]> getError(Removal[] seq1, Removal[] seq2, Removal r) {
+	public Tuple<Double, Removal[]> getError(Removal[] seq1, Removal[] seq2, Removal r, int i, int k, int j,  double e1, double e2) {
 		return null;
 	}
 
