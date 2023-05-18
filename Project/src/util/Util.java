@@ -1,5 +1,6 @@
 package util;
 
+import distance.DiscreteFrechet;
 import distance.DistanceMeasure;
 import distance.Frechet;
 import distance.FrechetApprox;
@@ -12,6 +13,7 @@ import function.SumMaxTotal;
 import function.OptimizationFunction;
 import function.Sum;
 import line.PolyLine;
+import simplifier.BruteForce;
 import simplifier.LineSimplifier;
 import simplifier.extended.summax.SumMaxActiveDP;
 import simplifier.extended.summax.SumMaxTotalDP;
@@ -22,6 +24,11 @@ import simplifier.extended.sumsum.SumSumMergeGE;
 import simplifier.extended.sumsum.SumSumMergeGEP;
 import simplifier.extended.sumsum.SumSumMergeGTD;
 import simplifier.extended.sumsum.SumSumTotalDP;
+import simplifier.greedy.GreedyBU;
+import simplifier.greedy.GreedyDiff;
+import simplifier.heuristic.Equal;
+import simplifier.heuristic.InOrder;
+import simplifier.heuristic.RandomOrder;
 import simplifier.simple.MinMAX;
 import simplifier.simple.MinSUM;
 
@@ -31,13 +38,16 @@ import simplifier.simple.MinSUM;
  */
 public class Util {
 
-	private static final DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox() };
-	public static final LineSimplifier[] simplifiers = { new MinMAX(), new MinSUM(), new SumMaxActiveDP(),
-			new SumMaxTotalDP(), new SumSumActiveDP(new SumSumMerge()), new SumSumTotalDP(new SumSumMerge()),
-			new SumSumActiveDP(new SumSumMergeGTD()), new SumSumTotalDP(new SumSumMergeGTD()),
-			new SumSumActiveDP(new SumSumMergeGBU()), new SumSumTotalDP(new SumSumMergeGBU()),
-			new SumSumActiveDP(new SumSumMergeGEP()), new SumSumTotalDP(new SumSumMergeGEP()),
-			new SumSumActiveDP(new SumSumMergeGE()), new SumSumTotalDP(new SumSumMergeGE()) };
+	private static final DistanceMeasure[] distances = { new Hausdorff(), new Frechet(), new FrechetApprox(),
+			new DiscreteFrechet() };
+	public static final LineSimplifier[] simplifiers = { new MinMAX(), new MinSUM(), new SumMaxActiveDP(), //
+			new SumMaxTotalDP(), new SumSumActiveDP(new SumSumMerge()), new SumSumTotalDP(new SumSumMerge()), //
+			new SumSumActiveDP(new SumSumMergeGTD()), new SumSumTotalDP(new SumSumMergeGTD()), //
+			new SumSumActiveDP(new SumSumMergeGBU()), new SumSumTotalDP(new SumSumMergeGBU()), //
+			new SumSumActiveDP(new SumSumMergeGEP()), new SumSumTotalDP(new SumSumMergeGEP()), //
+			new SumSumActiveDP(new SumSumMergeGE()), new SumSumTotalDP(new SumSumMergeGE()), //
+			new GreedyBU(), new GreedyDiff(), new InOrder(), new RandomOrder(), new Equal(), //
+			new BruteForce() }; //
 	public static final OptimizationFunction[] optFunctions = { new Max(), new Sum(), new SumMaxActive(),
 			new SumMaxTotal(), new SumSumActive(), new SumSumTotal() };
 
