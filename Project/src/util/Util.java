@@ -21,7 +21,8 @@ import simplifier.extended.sumsum.SumSumActiveDP;
 import simplifier.extended.sumsum.SumSumMerge;
 import simplifier.extended.sumsum.SumSumMergeGBU;
 import simplifier.extended.sumsum.SumSumMergeGE;
-import simplifier.extended.sumsum.SumSumMergeGEP;
+import simplifier.extended.sumsum.SumSumMergeGCE_EST_GTD;
+import simplifier.extended.sumsum.SumSumMergeGCE_GTD_EXACT;
 import simplifier.extended.sumsum.SumSumMergeGTD;
 import simplifier.extended.sumsum.SumSumTotalDP;
 import simplifier.greedy.GreedyBU;
@@ -44,7 +45,8 @@ public class Util {
 			new SumMaxTotalDP(), new SumSumActiveDP(new SumSumMerge()), new SumSumTotalDP(new SumSumMerge()), //
 			new SumSumActiveDP(new SumSumMergeGTD()), new SumSumTotalDP(new SumSumMergeGTD()), //
 			new SumSumActiveDP(new SumSumMergeGBU()), new SumSumTotalDP(new SumSumMergeGBU()), //
-			new SumSumActiveDP(new SumSumMergeGEP()), new SumSumTotalDP(new SumSumMergeGEP()), //
+			new SumSumActiveDP(new SumSumMergeGCE_EST_GTD()), new SumSumTotalDP(new SumSumMergeGCE_EST_GTD()), //
+			new SumSumActiveDP(new SumSumMergeGCE_GTD_EXACT()), new SumSumTotalDP(new SumSumMergeGCE_GTD_EXACT()), //
 			new SumSumActiveDP(new SumSumMergeGE()), new SumSumTotalDP(new SumSumMergeGE()), //
 			new GreedyBU(), new GreedyDiff(), new InOrder(), new RandomOrder(), new Equal(), //
 			new BruteForce() }; //
@@ -207,6 +209,18 @@ public class Util {
 			nodes[i].right = nodes[i + 1];
 		}
 		return nodes;
+	}
+
+	public static double sumSumMergeEstimation(int i, int k, int j, double e1, double e2) {
+		int n = Math.abs(i - k) - 1;
+		if (n == 0) {
+//			return e2;
+		}
+		int m = Math.abs(j - k) - 1;
+		if (m == 0) {
+//			return e1; 
+		}
+		return (n + m + 1) * (e1 / (n+1) + e2 / (m+1));
 	}
 
 }

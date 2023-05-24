@@ -34,7 +34,7 @@ public class GreedyBU implements LineSimplifier {
 	
 	@Override
 	public String toString() {
-		return "GreedyBU";
+		return "Greedy";
 	}
 
 }

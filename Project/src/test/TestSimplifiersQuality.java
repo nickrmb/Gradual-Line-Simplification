@@ -78,10 +78,10 @@ public class TestSimplifiersQuality {
 					double[] ssol = function.measure(solutionsSeq[i][j], solutionsError[i][j]);
 					double val = ssol[ssol.length - 1];
 					overest += val / opt[j];
-					if (simplifiers[i].toString().equalsIgnoreCase("SumSumActiveDP-Exact")
-							&& function.toString().equals("SumSumActive") && val != opt[j]) {
-						System.out.println(lines[j]);
-					}
+//					if (simplifiers[i].toString().equalsIgnoreCase("SumSumActiveDP-Exact")
+//							&& function.toString().equals("SumSumActive") && val != opt[j]) {
+//						System.out.println(lines[j]);
+//					}
 				}
 				map.put(simplifiers[i].toString(), overest);// numLines);
 			}
