@@ -6,7 +6,7 @@ import java.util.zip.DataFormatException;
 
 import distance.DistanceMeasure;
 import distance.FrechetApprox;
-import function.OptimizationFunction;
+import function.ObjectiveFunction;
 import line.PolyLine;
 import simplifier.LineSimplifier;
 import util.Tuple;
@@ -60,7 +60,7 @@ public class Simplify {
 
 		System.out.println("Simplified " + lineName + " with " + simplifier + " in " + time + " ms:");
 		
-		for(OptimizationFunction func : Util.optFunctions) {
+		for(ObjectiveFunction func : Util.optFunctions) {
 
 			double[] sequence = func.measure(simplification, solution.r);
 			System.out.println("\t" + distance.toString() + "-Distance under " + func + ": " + sequence[sequence.length - 1]);

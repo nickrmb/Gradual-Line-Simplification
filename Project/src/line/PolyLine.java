@@ -11,6 +11,7 @@ public class PolyLine {
 	private Vertex[] vertices;
 	private boolean[] isRemoved;
 	private int active;
+	private String name;
 
 	public PolyLine(Vertex[] vertices) {
 		if (vertices.length <= 1)
@@ -19,6 +20,14 @@ public class PolyLine {
 
 		active = vertices.length;
 		isRemoved = new boolean[active];
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -131,7 +140,10 @@ public class PolyLine {
 			points[i] = new Vertex(x - sx, y - sy);
 		}
 
-		return new PolyLine(points);
+		PolyLine line = new PolyLine(points);
+		line.setName(f.getName());
+
+		return line;
 	}
 
 	/**
@@ -142,13 +154,13 @@ public class PolyLine {
 	public int length() {
 		return vertices.length;
 	}
-	
+
 	@Override
 	public String toString() {
 		String str = "[";
-		for(int i = 0; i < vertices.length; i++) {
+		for (int i = 0; i < vertices.length; i++) {
 			str += vertices[i].toString();
-			if(i != vertices.length - 1) {
+			if (i != vertices.length - 1) {
 				str += ", ";
 			}
 		}

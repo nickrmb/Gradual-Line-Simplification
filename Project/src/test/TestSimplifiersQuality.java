@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import distance.DistanceMeasure;
-import distance.Hausdorff;
-import function.OptimizationFunction;
+import distance.Frechet;
+import function.ObjectiveFunction;
 import line.PolyLine;
 import line.Vertex;
 import simplifier.BruteForce;
@@ -22,14 +22,14 @@ public class TestSimplifiersQuality {
 
 	private static final BruteForce bruteForce = new BruteForce();
 
-	private static final OptimizationFunction[] functions = Util.optFunctions; // { new SumSumActive() };//
+	private static final ObjectiveFunction[] functions = Util.optFunctions; // { new SumSumActive() };//
 
 	public static void main(String[] args) {
 
 		int numLines = 250;
 		int lineLength = 10;
 		double scala = 100;
-		DistanceMeasure distance = new Hausdorff();
+		DistanceMeasure distance = new Frechet();
 
 		PolyLine[] lines = new PolyLine[numLines];
 		for (int i = 0; i < numLines; i++) {
@@ -53,7 +53,7 @@ public class TestSimplifiersQuality {
 			}
 		}
 
-		for (OptimizationFunction function : functions) {
+		for (ObjectiveFunction function : functions) {
 
 			bruteForce.setFunction(function);
 			double[] opt = new double[numLines];

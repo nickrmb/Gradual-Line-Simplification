@@ -1,6 +1,6 @@
 package function;
 
-public class SumMaxTotal implements OptimizationFunction{
+public class SumMaxTotal implements ObjectiveFunction{
 
 	@Override
 	public double[] measure(int[] simplification, double[] error) {

@@ -3,7 +3,7 @@ package simplifier;
 import java.util.Arrays;
 
 import distance.DistanceMeasure;
-import function.OptimizationFunction;
+import function.ObjectiveFunction;
 import function.SumSumActive;
 import line.PolyLine;
 import util.Tuple;
@@ -11,7 +11,7 @@ import util.Util;
 
 public class BruteForce implements LineSimplifier {
 
-	private OptimizationFunction function = new SumSumActive();
+	private ObjectiveFunction function = new SumSumActive();
 	private PolyLine l;
 	private DistanceMeasure distance;
 
@@ -59,7 +59,7 @@ public class BruteForce implements LineSimplifier {
 		array[b] = tmp;
 	}
 	
-	public void setFunction(OptimizationFunction function) {
+	public void setFunction(ObjectiveFunction function) {
 		this.function = function;
 	}
 

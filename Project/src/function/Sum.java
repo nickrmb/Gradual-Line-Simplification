@@ -1,6 +1,6 @@
 package function;
 
-public class Sum implements OptimizationFunction {
+public class Sum implements ObjectiveFunction {
 
 	@Override
 	public double[] measure(int[] simplification, double[] error) {

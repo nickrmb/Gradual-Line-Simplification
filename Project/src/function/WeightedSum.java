@@ -1,6 +1,6 @@
 package function;
 
-public class WeightedSum implements OptimizationFunction {
+public class WeightedSum implements ObjectiveFunction {
 
 	double[] weight;
 	

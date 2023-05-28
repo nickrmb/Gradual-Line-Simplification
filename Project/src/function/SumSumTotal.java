@@ -1,8 +1,8 @@
 package function;
 
-public class SumSumTotal implements OptimizationFunction {
+public class SumSumTotal implements ObjectiveFunction {
 
-	private OptimizationFunction weighted = new WeightedSum();
+	private ObjectiveFunction weighted = new WeightedSum();
 
 	@Override
 	public double[] measure(int[] simplification, double[] error) {

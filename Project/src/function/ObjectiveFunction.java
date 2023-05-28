@@ -1,6 +1,6 @@
 package function;
 
-public interface OptimizationFunction {
+public interface ObjectiveFunction {
 	
 	
 	/**

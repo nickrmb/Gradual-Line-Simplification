@@ -52,7 +52,7 @@ public class Visualizer extends JFrame {
 
 	private int cur = 0;
 
-	private static final OptimizationFunction[] errorMeasures = Util.optFunctions;
+	private static final ObjectiveFunction[] errorMeasures = Util.optFunctions;
 	public static void main(String[] args) throws NumberFormatException, IOException, DataFormatException {
 		Tuple<Tuple<PolyLine, LineSimplifier>, DistanceMeasure> fromArgs = Simplify.getFromArgs(args);
 

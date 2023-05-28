@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 import util.Node;
 import util.Util;
 
-public class SumMaxActive implements OptimizationFunction {
+public class SumMaxActive implements ObjectiveFunction {
 	
 	private double[] errors;
 	

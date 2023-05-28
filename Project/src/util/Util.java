@@ -10,7 +10,7 @@ import function.SumSumTotal;
 import function.Max;
 import function.SumMaxActive;
 import function.SumMaxTotal;
-import function.OptimizationFunction;
+import function.ObjectiveFunction;
 import function.Sum;
 import line.PolyLine;
 import simplifier.BruteForce;
@@ -25,8 +25,9 @@ import simplifier.extended.sumsum.SumSumMergeGCE_EST_GTD;
 import simplifier.extended.sumsum.SumSumMergeGCE_GTD_EXACT;
 import simplifier.extended.sumsum.SumSumMergeGTD;
 import simplifier.extended.sumsum.SumSumTotalDP;
-import simplifier.greedy.GreedyBU;
+import simplifier.greedy.Greedy;
 import simplifier.greedy.GreedyDiff;
+import simplifier.greedy.GreedyPractical;
 import simplifier.heuristic.Equal;
 import simplifier.heuristic.InOrder;
 import simplifier.heuristic.RandomOrder;
@@ -48,9 +49,9 @@ public class Util {
 			new SumSumActiveDP(new SumSumMergeGCE_EST_GTD()), new SumSumTotalDP(new SumSumMergeGCE_EST_GTD()), //
 			new SumSumActiveDP(new SumSumMergeGCE_GTD_EXACT()), new SumSumTotalDP(new SumSumMergeGCE_GTD_EXACT()), //
 			new SumSumActiveDP(new SumSumMergeGE()), new SumSumTotalDP(new SumSumMergeGE()), //
-			new GreedyBU(), new GreedyDiff(), new InOrder(), new RandomOrder(), new Equal(), //
+			new Greedy(), new GreedyDiff(), new GreedyPractical(2, 10), new InOrder(), new RandomOrder(), new Equal(), //
 			new BruteForce() }; //
-	public static final OptimizationFunction[] optFunctions = { new Max(), new Sum(), new SumMaxActive(),
+	public static final ObjectiveFunction[] optFunctions = { new Max(), new Sum(), new SumMaxActive(),
 			new SumMaxTotal(), new SumSumActive(), new SumSumTotal() };
 
 	/**
@@ -118,9 +119,9 @@ public class Util {
 	 * @param s
 	 * @return
 	 */
-	public static OptimizationFunction fromStringToMeasure(String s) {
+	public static ObjectiveFunction fromStringToMeasure(String s) {
 
-		for (OptimizationFunction measure : optFunctions)
+		for (ObjectiveFunction measure : optFunctions)
 			if (s.equalsIgnoreCase(measure.toString()))
 				return measure;
 		return null;
@@ -162,7 +163,7 @@ public class Util {
 	 * 
 	 * @return
 	 */
-	public static String getAvailableMeasures() {
+	public static String getAvailableObjectives() {
 		String list = "";
 		for (int i = 0; i < optFunctions.length; i++) {
 			list += optFunctions[i].toString();
@@ -220,7 +221,7 @@ public class Util {
 		if (m == 0) {
 //			return e1; 
 		}
-		return (n + m + 1) * (e1 / (n+1) + e2 / (m+1));
+		return (n + m + 1) * (e1 / (n + 1) + e2 / (m + 1));
 	}
 
 }

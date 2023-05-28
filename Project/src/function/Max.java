@@ -1,6 +1,6 @@
 package function;
 
-public class Max implements OptimizationFunction {
+public class Max implements ObjectiveFunction {
 
 	@Override
 	public double[] measure(int[] simplification, double[] error) {
