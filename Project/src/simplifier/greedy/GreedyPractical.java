@@ -9,6 +9,8 @@ import util.Tuple;
 
 public class GreedyPractical implements LineSimplifier {
 	private double b, c;
+	
+	public static int calls;
 
 	public GreedyPractical(double b, double c) {
 		this.b = b;
@@ -17,6 +19,7 @@ public class GreedyPractical implements LineSimplifier {
 
 	@Override
 	public Tuple<int[], double[]> simplify(PolyLine l, DistanceMeasure distance) {
+		calls = 0;
 		double eps = new Frechet().measure(l, 0, l.length() - 1);
 		double upper = 2 * eps;
 		double stop = eps / Math.pow(l.length(), c);
@@ -246,6 +249,7 @@ public class GreedyPractical implements LineSimplifier {
 		}
 		
 		private double tightened(PolyLine l, int from, int to, double upper, double stop, double b) {
+			GreedyPractical.calls += 1;
 			double cur = upper;
 			while (cur >= stop && FrechetApprox.test(l, from, to, cur / b, 0.0)) {
 				cur /= b;

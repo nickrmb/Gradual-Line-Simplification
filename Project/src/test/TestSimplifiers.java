@@ -111,10 +111,10 @@ public class TestSimplifiers {
 			}
 		});
 
-		File output = new File("output.csv");
+		File output = new File("simplifiers-" + distance.toString() + ".csv");
 		int c = 1;
 		while (output.exists()) {
-			output = new File("output-" + (c++) + ".csv");
+			output = new File("simplifiers-" + distance.toString() +"-" + (c++) + ".csv");
 		}
 		output.createNewFile();
 
