@@ -14,7 +14,3 @@ until we removed all vertices except the first and last
 one.
 
 There are multiple optimization goals that can be considered.
-
-## Min Sum
-
-In the min sum problem we are interested in finding simplifications such that the summation of the error created in each simplification step is minimalized. See [min-sum/](min-sum/) to see the work dedicated to the min sum optimization goal.
