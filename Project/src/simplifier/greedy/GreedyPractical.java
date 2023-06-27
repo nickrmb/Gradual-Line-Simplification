@@ -249,10 +249,10 @@ public class GreedyPractical implements LineSimplifier {
 		}
 		
 		private double tightened(PolyLine l, int from, int to, double upper, double stop, double b) {
-			GreedyPractical.calls += 1;
 			double cur = upper;
 			while (cur >= stop && FrechetApprox.test(l, from, to, cur / b, 0.0)) {
 				cur /= b;
+				GreedyPractical.calls += 1;
 			}
 			return cur;
 		}

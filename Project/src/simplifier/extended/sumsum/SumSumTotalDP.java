@@ -14,7 +14,8 @@ public class SumSumTotalDP extends DynamicProgramSimplifier {
 
 	private int length;
 	private Removal[][] seq;
-	private Removal[][] cur;
+	private Removal[] cur = null;
+	private double curError = Double.POSITIVE_INFINITY;
 	private SymmetricMatrix totalSum;
 	private SymmetricMatrix fromK;
 
@@ -32,18 +33,21 @@ public class SumSumTotalDP extends DynamicProgramSimplifier {
 
 	@Override
 	public void onMinFound(int i, int j, int minK) {
-		if (cur[minK] == null) {
+		if (cur == null) {
 			Removal r = new Removal(minK, new SC(i, j),
 					totalSum.getValue(i, minK) + totalSum.getValue(minK, j) + getShortcutDistance(i, j));
 			Tuple<Double, Removal[]> merge = this.merge.merge(getRemoval(i, minK), getRemoval(minK, j), r);
-			cur[minK] = merge.r;
+			cur = merge.r;
 			if(merge.r != null && merge.l != null) {
 				updateError(i, j, merge.l);
 			}
 		}
-		setRemoval(i, j, cur[minK]);
+		setRemoval(i, j, cur);
 		totalSum.setValue(i, j, totalSum.getValue(i, minK) + totalSum.getValue(minK, j) + getShortcutDistance(i, j));
 		fromK.setValue(i, j, minK);
+		
+		cur = null;
+		curError = Double.POSITIVE_INFINITY;
 	}
 
 	@Override
@@ -51,7 +55,10 @@ public class SumSumTotalDP extends DynamicProgramSimplifier {
 		Removal r = new Removal(k, new SC(i, j), totalSum.getValue(i, k) + totalSum.getValue(k, j) + shortcutDistance);
 		Tuple<Double, Removal[]> error = merge.getError(getRemoval(i, k), getRemoval(k, j), r, i, k, j, error_ik,
 				error_kj);
-		cur[k] = error.r;
+		if (error.l < curError) {
+			cur = error.r;
+			curError = error.l;
+		}
 		return error.l;
 	}
 
@@ -95,7 +102,6 @@ public class SumSumTotalDP extends DynamicProgramSimplifier {
 
 	@Override
 	public void onNewHop() {
-		cur = new Removal[length][];
 	}
 
 	@Override

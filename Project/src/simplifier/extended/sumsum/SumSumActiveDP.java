@@ -14,7 +14,8 @@ public class SumSumActiveDP extends DynamicProgramSimplifier {
 
 	private int length;
 	private Removal[][] seq;
-	private Removal[][] cur;
+	private Removal[] cur = null;
+	private double curError = Double.POSITIVE_INFINITY;
 	private SymmetricMatrix fromK;
 
 	public SumSumActiveDP(Merge m) {
@@ -30,16 +31,19 @@ public class SumSumActiveDP extends DynamicProgramSimplifier {
 
 	@Override
 	public void onMinFound(int i, int j, int minK) {
-		if (cur[minK] == null) {
+		if (cur == null) {
 			Removal r = new Removal(minK, new SC(i, j), getShortcutDistance(i, j));
 			Tuple<Double, Removal[]> merge = this.merge.merge(getRemoval(i, minK), getRemoval(minK, j), r);
-			cur[minK] = merge.r;
-			if(merge.r != null && merge.l != null) {
+			cur = merge.r;
+			if (merge.r != null && merge.l != null) {
 				updateError(i, j, merge.l);
 			}
 		}
-		setRemoval(i, j, cur[minK]);
+		setRemoval(i, j, cur);
 		fromK.setValue(i, j, minK);
+		
+		cur = null;
+		curError = Double.POSITIVE_INFINITY;
 	}
 
 	@Override
@@ -47,7 +51,13 @@ public class SumSumActiveDP extends DynamicProgramSimplifier {
 		Removal r = new Removal(k, new SC(i, j), shortcutDistance);
 		Tuple<Double, Removal[]> error = merge.getError(getRemoval(i, k), getRemoval(k, j), r, i, k, j, error_ik,
 				error_kj);
-		cur[k] = error.r;
+//		System.out.println("---(" + i + "," + k + "," + j + ")---");
+//		System.out.println("Input: " + fromRemovalToString(getRemoval(i, k)) + " ; " + fromRemovalToString(getRemoval(k, j)) + " ; " + r.getIdx());
+//		System.out.println("Output: " + fromRemovalToString(error.r));
+		if (error.l < curError) {
+			cur = error.r;
+			curError = error.l;
+		}
 		return error.l;
 	}
 
@@ -90,13 +100,26 @@ public class SumSumActiveDP extends DynamicProgramSimplifier {
 
 	@Override
 	public void onNewHop() {
-		cur = new Removal[length][];
 	}
 
 	@Override
 	public String toString() {
 		return "SumSumActiveDP-" + merge.toString();
 	}
+
+//	private String fromRemovalToString(Removal[] arr) {
+//		String str = "[";
+//		if (arr != null) {
+//			for (int i = 0; i < arr.length; i++) {
+//				str += arr[i].getIdx();
+//				if(i != arr.length - 1) {
+//					str += ", ";
+//				}
+//			}
+//		}
+//		str += "]";
+//		return str;
+//	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

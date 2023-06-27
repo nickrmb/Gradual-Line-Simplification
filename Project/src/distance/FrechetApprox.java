@@ -6,7 +6,7 @@ import line.PolyLine;
 public class FrechetApprox implements DistanceMeasure {
 
 	private double delta = 0.0000005;
-	private int iterations = 20;
+	private int iterations = 10;
 
 	public FrechetApprox() {
 	}

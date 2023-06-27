@@ -3,26 +3,26 @@ package simplifier.extended.sumsum;
 import simplifier.extended.Merge;
 import simplifier.extended.Removal;
 import util.Tuple;
+import util.Util;
 
-public class SumSumMergeGCE_GTD_EXACT implements Merge {
+public class SumSumMergeGCE_EST_GBU implements Merge {
 
-	private SumSumMerge exact = new SumSumMerge();
-	private SumSumMergeGTD gtd = new SumSumMergeGTD();
+	private SumSumMergeGBU gbu = new SumSumMergeGBU();
 
 	@Override
 	public Tuple<Double, Removal[]> merge(Removal[] seq1, Removal[] seq2, Removal r) {
-		return exact.merge(seq1, seq2, r);
+		return gbu.merge(seq1, seq2, r);
 	}
 
 	@Override
 	public Tuple<Double, Removal[]> getError(Removal[] seq1, Removal[] seq2, Removal r, int i, int k, int j, double e1,
 			double e2) {
-		return new Tuple<>(gtd.merge(seq1, seq2, r).l, null);
+		return new Tuple<>(Util.sumSumMergeEstimation(i, k, j, e1, e2) + r.getError(), null);
 	}
 
 	@Override
 	public String toString() {
-		return "GCE_GTD_EXACT";
+		return "GCE_EST_GBU";
 	}
 
 }

@@ -20,8 +20,10 @@ import simplifier.extended.summax.SumMaxTotalDP;
 import simplifier.extended.sumsum.SumSumActiveDP;
 import simplifier.extended.sumsum.SumSumMerge;
 import simplifier.extended.sumsum.SumSumMergeGBU;
+import simplifier.extended.sumsum.SumSumMergeGCE_EST_GBU;
 import simplifier.extended.sumsum.SumSumMergeGE;
 import simplifier.extended.sumsum.SumSumMergeGCE_EST_GTD;
+import simplifier.extended.sumsum.SumSumMergeGCE_GBU_EXACT;
 import simplifier.extended.sumsum.SumSumMergeGCE_GTD_EXACT;
 import simplifier.extended.sumsum.SumSumMergeGTD;
 import simplifier.extended.sumsum.SumSumTotalDP;
@@ -47,9 +49,11 @@ public class Util {
 			new SumSumActiveDP(new SumSumMergeGTD()), new SumSumTotalDP(new SumSumMergeGTD()), //
 			new SumSumActiveDP(new SumSumMergeGBU()), new SumSumTotalDP(new SumSumMergeGBU()), //
 			new SumSumActiveDP(new SumSumMergeGCE_EST_GTD()), new SumSumTotalDP(new SumSumMergeGCE_EST_GTD()), //
+			new SumSumActiveDP(new SumSumMergeGCE_EST_GBU()), new SumSumTotalDP(new SumSumMergeGCE_EST_GBU()), //
 			new SumSumActiveDP(new SumSumMergeGCE_GTD_EXACT()), new SumSumTotalDP(new SumSumMergeGCE_GTD_EXACT()), //
+			new SumSumActiveDP(new SumSumMergeGCE_GBU_EXACT()), new SumSumTotalDP(new SumSumMergeGCE_GBU_EXACT()), //
 			new SumSumActiveDP(new SumSumMergeGE()), new SumSumTotalDP(new SumSumMergeGE()), //
-			new Greedy(), new GreedyDiff(), new GreedyPractical(2, 10), new InOrder(), new RandomOrder(), new Equal(), //
+			new Greedy(), new GreedyDiff(), new GreedyPractical(2, 2), new InOrder(), new RandomOrder(), new Equal(), //
 			new BruteForce() }; //
 	public static final ObjectiveFunction[] optFunctions = { new Max(), new Sum(), new SumMaxActive(),
 			new SumMaxTotal(), new SumSumActive(), new SumSumTotal() };
@@ -197,6 +201,19 @@ public class Util {
 
 		return new Tuple<>(solution.r[solution.r.length - 1], timeBetweenMS);
 
+	}
+
+	public static Tuple<Double, Double> computeInMicro(PolyLine line, LineSimplifier simplifier,
+			DistanceMeasure distance, ObjectiveFunction objective) {
+		long t1 = System.nanoTime();
+		Tuple<int[], double[]> result = simplifier.simplify(line, distance);
+		long t2 = System.nanoTime();
+
+		double time = ((double) (t2 - t1)) / 1000.0;
+		double[] errorSeq = objective.measure(result.l, result.r);
+		double error = errorSeq[errorSeq.length - 1];
+		
+		return new Tuple<>(error, time);
 	}
 
 	public static Node[] createNodeArray(int length) {
