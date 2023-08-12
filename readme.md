@@ -11,11 +11,11 @@ simplify a polygonal line into different level of details.
 
 <img src="misc/simplification.png" width=100%>
 
-In this work we deal with another approach of
-simplifying, so called gradual line simplification. It
-asks for simplifications such that we repeatedly remove one vertex of the line in each simplification step,
-until we removed all vertices except the first and last
-one.
+Here, we deal with another approach of
+simplifying, so called gradual line simplification (GLS). It
+involves repeatedly
+removing a single point until we are left with the first and last point. Each removal then forms a
+new simplification.
 
 There are multiple optimization goals that can be considered.
 
