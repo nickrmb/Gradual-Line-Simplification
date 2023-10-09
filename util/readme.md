@@ -24,6 +24,6 @@ The [grabber.py](grabber.py) file is a python program that grabs real world gps-
 Usage:
 
     import grabber
-    grab(fromPage, toPage, pathToFolder)
+    grabber.grab(fromPage, toPage, pathToFolder)
 
 where `fromPage` is the page the grabber starts and `toPage` is the page the grabber stops (included). Each page consists of 20 gps-traces.
