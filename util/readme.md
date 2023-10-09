@@ -11,7 +11,7 @@ The [simplifier.py](simplifier.py) file is a python program that lets you simpli
 Usage:
 
     import simplifier
-    simplifier.simplifyFile('pathToFile')
+    simplifier.simplifyFile(pathToFile)
 
 This will create a sgpx file with the same name. It will only accept files with .gpx file extensions.
 
