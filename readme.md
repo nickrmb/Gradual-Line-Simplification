@@ -17,7 +17,7 @@ Here, we deal with another approach of simplifying, so called gradual line simpl
 It involves the reapeated removal of a single point until we the first and last point are the only ones left.
 Meanwhile, each removal forms a new simplification.
 There exist different objective functions that can be considered in GLS (see page 23, Example 5.5 in [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf)).
-This work mainly consists of exploring these objective functions, defining them formally, discovering algorithms designated to minimize the objective value, as well as an experimental comparison of the algorithms.
+This work mainly consists of exploring these objective functions, defining them formally, discovering algorithms designated to minimize the objective value, as well as an experimental and theoretical comparison of the algorithms.
 
 ---
 
