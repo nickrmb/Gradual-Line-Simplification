@@ -3,6 +3,8 @@
 This is my bachelor thesis, commited at the University of Konstanz.
 See [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf) for full thesis.
 
+---
+
 # Gradual Line Simplification
 
 Simplifying polygonal lines is an important task faced
@@ -51,11 +53,40 @@ E.g.
 
     java -jar .\visualizer.jar .\data\l1.sgpx minsum hausdorff
 
-
 ---
 
 ## Simplifiers 
 
+There exist many simplifiers, most of them being variations from another.
+See section [7.1 Algorithm Overview](Bachelor_Thesis.pdf) in [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf) for more details of every algorithm.
 
+Due to a different implementation, simplifier names in the algorithms mostly differ from their formal expression.
+All simplification algorithm names, as well as their formal names can be seen here:
 
+| Simplifier                   | Formal Name   |
+|------------------------------|---------------|
+| MinMax                       | MinMax        |
+| MinSum                       | MinSum        |
+| Greedy                       | Greedy        |
+| GreedyPract                  | PGreedy       |
+| InOrder                      | IOH           |
+| RandomOrder                  | ROH           |
+| Equal                        | TOH           |
+| MinSMA                       | MinSMA        |
+| SumMaxTotalDP                | SMT-DNC       |
+| SumSumActiveDP-Exact         | SSA-DNC       |
+| SumSumTotalDP-Exact          | SST-DNC       |
+| SumSumActiveDP-GTD           | SSA-GTD       |
+| SumSumTotalDP-GTD            | SST-GTD       |
+| SumSumActiveDP-GBU           | SSA-GBU       |
+| SumSumTotalDP-GBU            | SST-GBU       |
+| SumSumActiveDP-GCE_GTD_EXACT | SSA-GTD-Exact |
+| SumSumTotalDP-GCE_GTD_EXACT  | SST-GTD-Exact |
+| SumSumActiveDP-GCE_GBU_EXACT | SSA-GBU-Exact |
+| SumSumTotalDP-GCE_GBU_EXACT  | SST-GBU-Exact |
+| SumSumActiveDP-GCE_EST_GTD   | SSA-MEST-GTD  |
+| SumSumTotalDP-GCE_EST_GTD    | SST-MEST-GTD  |
+| SumSumActiveDP-GCE_EST_GBU   | SSA-MEST-GBU  |
+| SumSumTotalDP-GCE_EST_GBU    | SST-MEST-GBU  |
+| GreedyDiff                   | GD            |
 
