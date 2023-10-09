@@ -19,7 +19,7 @@ This will create a sgpx file with the same name. It will only accept files with 
 
 ---
 
-The [grabber.py](grabber.py) file is a python program that grabs real world gps-traces from [here](https://www.openstreetmap.org/traces) and transforms them into the sgpx format.
+The [grabber.py](grabber.py) file is a python program that grabs real world gps-traces from [https://www.openstreetmap.org/traces](https://www.openstreetmap.org/traces) and transforms them into the sgpx format.
 
 Usage:
 
