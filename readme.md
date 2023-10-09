@@ -92,12 +92,9 @@ The `<simplifier>` argument for the [simplifier](simplifier.jar) and the [visual
 
 ## Geometric Distance Metrics
 
-\begin{table}[]
-\begin{tabular}{ll}
-Distance Metric & Description                                    \\
-Hausdorff       & Hausdorff distance named after Felix Hausdorff \\
-Frechet         & Frechet distance named after Maurice Frechet   \\
-DiscreteFrechet & Discrete adaptation of the Frechet distance    \\
-FrechetApprox   & Approximation of the Frechet distance         
-\end{tabular}
-\end{table}
+| Distance Metric Expression | Description                                    |
+|-----------------           |------------------------------------------------|
+| Hausdorff                  | Hausdorff distance named after Felix Hausdorff |
+| Frechet                    | Frechet distance named after Maurice Frechet   |
+| DiscreteFrechet            | Discrete adaptation of the Frechet distance    |
+| FrechetApprox              | Approximation of the Frechet distance          |
