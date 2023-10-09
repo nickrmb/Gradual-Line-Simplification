@@ -95,6 +95,8 @@ The `<simplifier>` argument for the [simplifier](simplifier.jar) and the [visual
 | Distance Metric Expression | Description                                    |
 |-----------------           |------------------------------------------------|
 | Hausdorff                  | [Hausdorff distance](https://en.wikipedia.org/wiki/Hausdorff_distance) named after [Felix Hausdorff](https://en.wikipedia.org/wiki/Felix_Hausdorff) |
-| Frechet                    | [Fréchet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance) named after Maurice Frechet   |
+| Frechet                    | [Fréchet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance) named after [Maurice Frechet](https://en.wikipedia.org/wiki/Ren%C3%A9_Maurice_Fr%C3%A9chet)   |
 | DiscreteFrechet            | Discrete adaptation of the [Fréchet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance)    |
 | FrechetApprox              | Approximation of the [Fréchet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance)           |
+
+For more details see section [3.2 Geometric Distance Metrics for Polygonal Curves](Bachelor_Thesis.pdf) in [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf).
