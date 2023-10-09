@@ -60,10 +60,10 @@ E.g.
 There exist many simplifiers, most of them being variations from another.
 See section [7.1 Algorithm Overview](Bachelor_Thesis.pdf) in [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf) for more details of every algorithm.
 
-Due to a different implementation, simplifier names in the algorithms mostly differ from their formal expression.
-All simplification algorithm names, as well as their formal names can be seen here:
+Due to a different implementation, simplifier names in the algorithm implementation mostly differ from their formal expression.
+The `<simplifier>` argument for the [simplifier](simplifier.jar) and the [visualizer](visualizer.jar) has to be given by its implementational name.
 
-| Simplifier                   | Formal Name   |
+| Implementational Name        | Formal Name   |
 |------------------------------|---------------|
 | MinMax                       | MinMax        |
 | MinSum                       | MinSum        |
