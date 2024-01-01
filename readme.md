@@ -5,15 +5,32 @@ See [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf) for full thesis.
 
 ---
 
+<div align="center">
+<pre>
+    █▒▒▒▒         █▒▒              █▒▒ ▒▒  
+  █▒    █▒▒       █▒▒            █▒▒    █▒▒
+ █▒▒              █▒▒             █▒▒      
+ █▒▒              █▒▒               █▒▒    
+ █▒▒   █▒▒▒▒      █▒▒                  █▒▒ 
+  █▒▒    █▒       █▒▒            █▒▒    █▒▒
+   █▒▒▒▒▒         █▒▒▒▒▒▒▒▒        █▒▒ ▒▒  <br>
+- - - - - - - - - - - - - -
+Gradual Line Simplification
+</pre>
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
+
 # Gradual Line Simplification
 
 Simplifying polygonal lines is an important task faced
 in many different applications.
 There exist many progressive line simplification algorithms that simplify a polygonal line into different level of details.
 
-<img src="misc/simplification.png" width=100%>
+<img src="misc/simplification.svg" width=100%>
 
-Here, we deal with another approach of simplifying, so called gradual line simplification (GLS).
+Here, we deal with novel approach of simplifying, so called gradual line simplification (GLS).
 It involves the reapeated removal of a single point until we the first and last point are the only ones left.
 Meanwhile, each removal forms a new simplification.
 There exist different objective functions that can be considered in GLS (see page 23, Example 5.5 in [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf)).
