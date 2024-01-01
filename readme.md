@@ -22,21 +22,23 @@ Gradual Line Simplification
 
 </div>
 
-# Gradual Line Simplification
-
 Simplifying polygonal lines is an important task faced
 in many different applications.
 There exist many progressive line simplification algorithms that simplify a polygonal line into different level of details.
 
-<img src="misc/simplification.svg" width=100%>
 
 Here, we deal with novel approach of simplifying, so called gradual line simplification (GLS).
 It involves the reapeated removal of a single point until we the first and last point are the only ones left.
 Meanwhile, each removal forms a new simplification.
-There exist different objective functions that can be considered in GLS (see page 23, Example 5.5 in [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf)).
-This work mainly consists of exploring these objective functions, defining them formally, discovering and analyzing algorithms designated to minimize the objective value, as well as an experimental and theoretical comparison of proposed algorithms.
 
----
+<p>
+    <img src="misc/simplification.svg" width=100%>
+    <em>An example gradual line simplification.</em>
+</p>
+
+There exist different objective functions that can be considered in GLS (see page 23, Example 5.5 in [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf)).
+
+This work mainly consists of exploring these objective functions, defining them formally, discovering and analyzing algorithms designated to minimize the objective value, as well as an experimental and theoretical comparison of proposed algorithms.
 
 # Tests
 
@@ -69,8 +71,6 @@ Usage:
 E.g.
 
     java -jar .\visualizer.jar .\data\l1.sgpx minsum hausdorff
-
----
 
 ## Simplifiers 
 
