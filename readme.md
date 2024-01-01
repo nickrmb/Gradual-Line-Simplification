@@ -44,7 +44,7 @@ This work mainly consists of exploring these objective functions, defining them 
 
 ### Simplifier
 
-The [simplifier.jar](simplifier.jar) file is able to simplify a line (.sgpx format - see [util](/util) for more info) using a simplification algorithm under a specific geometric distance metric.
+The [simplifier.jar](tests/simplifier.jar) file is able to simplify a line (.sgpx format - see [util](/util) for more info) using a simplification algorithm under a specific geometric distance metric.
 
 Usage:
 
@@ -62,7 +62,7 @@ to print the removal sequence.
 
 ### Visualizer
 
-The [visualizer.jar](visualizer.jar) file has the same functionality as the [simplifier](simplifier.jar), except that the visualizer runs an interface that displays the line, as well as its simplifications.
+The [visualizer.jar](tests/visualizer.jar) file has the same functionality as the [simplifier](tests/simplifier.jar), except that the visualizer runs an interface that displays the line, as well as its simplifications.
 
 Usage:
 
@@ -78,7 +78,7 @@ There exist many simplifiers, most of them being variations from another.
 See section [7.1 Algorithm Overview](Bachelor_Thesis.pdf) in [Bachelor_Thesis.pdf](Bachelor_Thesis.pdf) for more details of every algorithm.
 
 Due to a different implementation, simplifier names in the algorithm implementation mostly differ from their formal expression.
-The `<simplifier>` argument for the [simplifier](simplifier.jar) and the [visualizer](visualizer.jar) has to be given by its implementational name.
+The `<simplifier>` argument for the [simplifier](tests/simplifier.jar) and the [visualizer](tests/visualizer.jar) has to be given by its implementational name.
 
 | Implementational Name        | Formal Name   |
 |------------------------------|---------------|
